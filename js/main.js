@@ -16,13 +16,14 @@ function main()
 		testing.amplitude = 50;
 		testing.on("tick", update);
 
-	container.addChild(testing);
-
 	// Virtual Grid
-	var virtualGrid = new VirtualGrid(30,30);
-	var virtualGridDisplay = new VirtualGridDisplay( virtualGrid );
+	var virtualGrid = new VirtualGrid(30);
+	// var virtualGridDisplay = new VirtualGridDisplay( virtualGrid );
 
-	container.addChild(virtualGridDisplay);
+	// cursor
+	var cursor = new Cursor( virtualGrid );
+
+	container.addChild(testing, cursor);
 	// Extension Test
   	var extend_test = new ExtendedContainer();
 		extend_test.output();

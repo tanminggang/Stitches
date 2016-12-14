@@ -7,4 +7,6 @@ html, body, div, ul, li, button, h1, p
 body
 {
     overflow: hidden;
+    cursor: none;
+    background-color: #edecea;
 }
