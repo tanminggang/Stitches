@@ -23,3 +23,9 @@ VirtualGrid.prototype.PositionToPosition = function(x, y)
 	var grid = this.PositionToGrid( x, y );
 	return this.GridToPosition( grid.x, grid.y );
 }
+
+VirtualGrid.prototype.PositionToCenterPosition = function(x, y)
+{
+	var grid = this.PositionToGrid( x, y );
+	return this.GridToCenterPosition( grid.x, grid.y );
+}

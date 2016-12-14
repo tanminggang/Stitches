@@ -6,11 +6,10 @@ html, body, div, ul, li, button, h1, p
 
 body
 {
-
-    cursor: none;
+    overflow: hidden;
     background-color: #edecea;
 }
-test
+crap
 {
-    overflow: hidden;
+    cursor: none;
 }
