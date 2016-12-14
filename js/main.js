@@ -1,8 +1,8 @@
 function main()
-{	
+{
 	// Setup
 	setup();
-	
+
 	// Keyboard Test
 	document.onkeydown = keyPressed;
 
@@ -16,13 +16,18 @@ function main()
 		testing.amplitude = 50;
 		testing.on("tick", update);
 
-	container.addChild(testing);  
+	container.addChild(testing);
 
+	// Virtual Grid
+	var virtualGrid = new VirtualGrid(30,30);
+	var virtualGridDisplay = new VirtualGridDisplay( virtualGrid );
+
+	container.addChild(virtualGridDisplay);
 	// Extension Test
   	var extend_test = new ExtendedContainer();
 		extend_test.output();
 }
-	
+
 function keyPressed( event )
 {
 	//Keycodes found at http://keycode.info
