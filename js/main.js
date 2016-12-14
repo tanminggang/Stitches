@@ -18,12 +18,12 @@ function main()
 
 	// Virtual Grid
 	var virtualGrid = new VirtualGrid(30);
-	// var virtualGridDisplay = new VirtualGridDisplay( virtualGrid );
+	var virtualGridDisplay = new VirtualGridDisplay( virtualGrid );
 
 	// cursor
 	var cursor = new Cursor( virtualGrid );
 
-	container.addChild(testing, cursor);
+	container.addChild( virtualGridDisplay, cursor);
 	// Extension Test
   	var extend_test = new ExtendedContainer();
 		extend_test.output();
