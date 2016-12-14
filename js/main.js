@@ -1,3 +1,11 @@
+var spacing = 10;
+var colors = {
+	background : "#edecea",
+	foreground : "#dbd9d6"
+	//primary : ;
+	//secondary : ;
+	//tertiary : ;
+}
 function main()
 {
 	// Setup
@@ -6,27 +14,39 @@ function main()
 	// Keyboard Test
 	document.onkeydown = keyPressed;
 
-	// Display Test
-	var testing = new createjs.Shape();
-		//testing.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 50);
-		testing.graphics.beginFill("DeepSkyBlue").rect(0,0,50,50);
-		testing.originX = testing.x;
-		testing.counter = 0;
-		testing.increment = .1;
-		testing.amplitude = 50;
-		testing.on("tick", update);
-
 	// Virtual Grid
-	var virtualGrid = new VirtualGrid(30);
-	var virtualGridDisplay = new VirtualGridDisplay( virtualGrid );
-
-	// cursor
+	var virtualGrid = new VirtualGrid( spacing );
+	var background = new Background( virtualGrid );
+	var drawing = new createjs.Shape();
 	var cursor = new Cursor( virtualGrid );
 
-	container.addChild( virtualGridDisplay, cursor);
-	// Extension Test
-  	var extend_test = new ExtendedContainer();
-		extend_test.output();
+	stage.on( "tick", update );
+	stage.on("mouseDown", pressDown);
+	stage.on("pressUp", pressUp);
+	stage.on("pressMove", pressMove);
+
+	stage.addChild( background );
+	container.addChild( background, drawing, cursor );
+}
+
+function update( event )
+{
+
+}
+
+function pressDown( event )
+{
+
+}
+
+function pressUp( event )
+{
+
+}
+
+function pressMove( event )
+{
+
 }
 
 function keyPressed( event )
@@ -36,10 +56,4 @@ function keyPressed( event )
 	{
 		console.log("testing");
 	}
-}
-
-function update( event )
-{
-	event.target.x = event.target.originX + Math.sin( event.target.counter ) * event.target.amplitude;
-	event.target.counter += event.target.increment;
 }
