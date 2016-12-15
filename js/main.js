@@ -31,6 +31,9 @@ function main()
 	// Listeners
 	container.addChild( background, queue, thread, cursor );
 	canvas.addEventListener("wheel", this.mouseWheel.bind(this), false );
+	stage.addEventListener("keydown", this.keyDown.bind(this), false );
+	stage.addEventListener("keyup", this.keyUp.bind(this), false );
+	stage.addEventListener("mousemove", this.mouseMove.bind(this), false );
 }
 
 function keyPressed( event )
@@ -47,7 +50,27 @@ function keyPressed( event )
 		case 13: 	// 'enter'
 			container.scaleX = container.scaleY = 1;
 			break;
+		default:
+			console.log( event.keyCode);
+
 	}
+
+
+}
+
+function mouseMove( event )
+{
+
+}
+
+function keyDown( event )
+{
+
+}
+
+function keyUp( event )
+{
+
 }
 
 function mouseWheel( event )
