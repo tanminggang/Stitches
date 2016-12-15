@@ -28,34 +28,71 @@ function main()
 	var background = new Background( virtualgrid );	
 	var cursor = new Cursor( virtualgrid );
 
+	// Listeners
 	container.addChild( background, queue, thread, cursor );
+	canvas.addEventListener("wheel", this.mouseWheel.bind(this), false );
 }
 
 function keyPressed( event )
 {
 	//Keycodes found at http://keycode.info
-	if( event.keyCode == 32 )	// space
+	switch( event.keyCode )
 	{
-		// clip string
+		case 32: 	// 'space'
+			break;	
+		case 90: 	// 'z'
+			queue.undo();
+			thread.clear();		
+			break;
+		case 13: 	// 'enter'
+			container.scaleX = container.scaleY = 1;
+			break;
 	}
+}
 
-	if(event.keyCode == 90)		// z
-	{
-		queue.undo();
-		thread.clear();
-	}
+function mouseWheel( event )
+{
+	var zoom = 1/1.1;
+
+	if(Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)))>0)
+        zoom=1.1;
+
+    container.scaleX = container.scaleY *= zoom;
 }
 
 /*
 
 	TODO
-	- animate thread after draw
+	- animate thread after draw	
 	- pan
 	- zoom
 	- add additional colors
+	- tweak colors
 	- save
 	- load
 	- show backing threads
 	- cut thread
+	- design initial dealyo
+	- load initial dealyo
+
+*/
+
+
+/*
+
+	Panning Code
+
+	p.updatePanDelta = function()
+	{
+
+		var wX = Math.floor(this.parent.x / virtualGrid.spacing) * virtualGrid.spacing;
+		var wY = Math.floor(this.parent.y / virtualGrid.spacing) * virtualGrid.spacing;
+
+		this.display.x = -wX;
+		this.display.y = -wY;
+
+		this.vertical.y = -wY;
+		this.horizontal.x = -wX;
+	}
 
 */

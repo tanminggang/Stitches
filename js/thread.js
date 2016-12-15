@@ -96,13 +96,13 @@
 				var point = this.points[i];
 				var tween = createjs.Tween.get(point).to(
 					{x: end.x, y: end.y},
-					30 + 6 * this.points.length - ( 7 * i ),
+					10 + 6 * this.points.length - ( 7 * i ),
 					createjs.Ease.quadInOut);
 			}
 
 			p.clear = function()
 			{				
-				if( this.points.lenght < 1)
+				if( this.points.length < 1)
 					return;
 
 				// X coordinate is (x1 + x2) / 2
