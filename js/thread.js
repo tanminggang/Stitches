@@ -11,9 +11,7 @@
 
 		p.setup = function()
 		{
-			this.points = [];
-			this.isDown = false;
-			this.pressPoint = null;			
+			this.points = [];	
 			this.display = new createjs.Shape();
 			this.addChild( this.display );
 			this.on("added", this.added );			
@@ -29,20 +27,7 @@
 
 		p.update = function( event )
 		{
-			if(this.isDown)
-				return;
 
-			if(!this.pressPoint)
-				return;
-			
-			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
-			var pressPosition = this.pressPoint.getCenteredPosition();
-
-			this.display.graphics.clear().
-				setStrokeStyle(3,"round").
-				beginStroke(colors.foreground).
-				moveTo(pressPosition.x,pressPosition.y).
-				lineTo(pt.x,pt.y);
 		}
 
 		p.pressmove = function( event )
@@ -67,7 +52,6 @@
 
 		p.pressDown = function( event )
 		{
-			this.isDown = true;
 			this.points = [];
 
 			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
@@ -76,11 +60,7 @@
 
 		p.pressUp = function( event )
 		{
-			this.isDown = false;
 			this.display.graphics.clear();
-
-			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
-			this.pressPoint = this.virtualgrid.GetVirtualPosition(pt.x,pt.y);
 		}
 
 	window.Thread = createjs.promote( Thread, "Container" );
