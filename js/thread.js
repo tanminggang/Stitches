@@ -48,6 +48,7 @@
 			if( this.points.length <= 0)
 				return;
 
+			var weight = 2 + Math.random();
 			this.display.graphics.clear().
 				setStrokeStyle(3,"round").
 				beginStroke(colors.primary).

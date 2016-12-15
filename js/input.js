@@ -17,7 +17,6 @@ function Input( virtualgrid, drawing, background, queue, thread )
 
 Input.prototype.updateLastPosition = function()
 {
-	var position = this.drawing.globalToLocal(stage.mouseX, stage.mouseY );
 	this.lastPosition.x = stage.mouseX;
 	this.lastPosition.y = stage.mouseY;	
 }
@@ -42,7 +41,7 @@ Input.prototype.keyDown = function ( event )
 {
 	switch( event.keyCode )
 	{
-	case 32: 	// 'space'
+		case 32: 	// 'space'
 			this.updateLastPosition();
 			this.spacebarDown = true;
 			break;	
@@ -52,10 +51,16 @@ Input.prototype.keyDown = function ( event )
 			break;
 		case 13: 	// 'enter'
 			container.scaleX = container.scaleY = 1;
+			this.drawing.x = this.drawing.y = 0;
 			break;
 		default:
-			console.log( event.keyCode);
+			//console.log( event.keyCode);
+	}
 
+	if(event.keyCode >= 49 && event.keyCode <= 57 )
+	{
+		var id = event.keyCode - 48;
+		threadId = id;
 	}
 }
 

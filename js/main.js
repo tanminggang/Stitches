@@ -5,6 +5,12 @@ var colors = {
 	primary : "#3a62a3",
 	secondary : "#64a33a"
 }
+var threadColors =
+[
+	"#3a62a3",
+	"#64a33a"
+];
+var threadId = 1;
 
 function main()
 {
@@ -34,11 +40,12 @@ function main()
 /*
 
 	TODO
+	- link stitch color to 'styleId' so weights and images can be applied
+	- add additional colors
 	- animate thread removal
 	- try random thread weighting to make it more realistic
 	- add insert/exit points
 	- add thread 'drop shadow'
-	- add additional colors
 	- tweak colors
 	- show backing threads
 	- cut thread
