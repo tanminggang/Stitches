@@ -33,7 +33,7 @@
 
 				this.drawing.graphics.
 				setStrokeStyle(3,"round").
-				beginStroke(point.color).
+				beginStroke(point.GetColor()).
 				moveTo(start.x,start.y).
 				lineTo(end.x,end.y).
 				endStroke();
@@ -52,7 +52,7 @@
 
 			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
 
-			this.currentPoint = new DrawingPoint( this.virtualgrid, colors.primary );
+			this.currentPoint = new DrawingPoint( this.virtualgrid, threadId );
 			this.currentPoint.SetStartPosition( pt.x, pt.y );
 		}
 

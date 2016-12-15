@@ -60,7 +60,9 @@ Input.prototype.keyDown = function ( event )
 	if(event.keyCode >= 49 && event.keyCode <= 57 )
 	{
 		var id = event.keyCode - 48;
-		threadId = id;
+		
+		if(id < threadStyle.length)
+			threadId = id;
 	}
 }
 

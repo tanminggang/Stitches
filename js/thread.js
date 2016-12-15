@@ -51,7 +51,7 @@
 			var weight = 2 + Math.random();
 			this.display.graphics.clear().
 				setStrokeStyle(3,"round").
-				beginStroke(colors.primary).
+				beginStroke( threadStyle[threadId] ).
 				moveTo(this.points[0].x,this.points[0].y);
 
 			for(var i = 1; i < this.points.length; i++)

@@ -1,7 +1,7 @@
-function DrawingPoint( virtualgrid, color )
+function DrawingPoint( virtualgrid, threadStyle )
 {
 	this.virtualgrid = virtualgrid;
-	this.color = color;
+	this.style = threadStyle;
 }
 
 DrawingPoint.prototype.SetStartPosition = function( x, y )
@@ -12,4 +12,9 @@ DrawingPoint.prototype.SetStartPosition = function( x, y )
 DrawingPoint.prototype.SetEndPosition = function( x, y )
 {
 	this.endPosition = this.virtualgrid.GetVirtualPosition(x,y);
+}
+
+DrawingPoint.prototype.GetColor = function()
+{
+	return threadStyle[this.style];
 }
