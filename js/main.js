@@ -50,11 +50,11 @@ function keyPressed( event )
 
 	TODO
 	- animate thread after draw
+	- pan
+	- zoom
 	- add additional colors
 	- save
 	- load
-	- pan
-	- zoom
 	- show backing threads
 	- cut thread
 
