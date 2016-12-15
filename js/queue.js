@@ -19,7 +19,7 @@
 			this.on("added", this.added );
 		}
 
-		p.update = function()
+		p.updateThread = function()
 		{
 			// console.log("update");
 			this.drawing.graphics.clear();
@@ -48,7 +48,8 @@
 
 		p.pressDown = function( event )
 		{
-			// console.log("pressdown");
+			this.updateThread();
+
 			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
 
 			this.currentPoint = new DrawingPoint( this.virtualgrid, colors.primary );
@@ -62,7 +63,6 @@
 
 			this.currentPoint.SetEndPosition( pt.x, pt.y );
 			this.drawingPoints.push( this.currentPoint );
-			this.update();
 		}
 
 		p.undo = function()
@@ -70,7 +70,7 @@
 			if(this.drawingPoints.length > 0)
 				this.drawingPoints.pop();
 
-			this.update();
+			this.updateThread();
 		}
 
 	window.Queue = createjs.promote( Queue, "Container" );

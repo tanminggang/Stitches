@@ -7,6 +7,7 @@ var colors = {
 }
 
 var queue;
+var thread;
 
 function main()
 {
@@ -19,12 +20,12 @@ function main()
 	// Virtual Grid
 	var virtualgrid = new VirtualGrid( spacing );
 
-	// Queue
+	// Queue and Thread
 	queue = new Queue( virtualgrid );
+	thread = new Thread( virtualgrid );
 
 	// Display
 	var background = new Background( virtualgrid );	
-	var thread = new Thread( virtualgrid );
 	var cursor = new Cursor( virtualgrid );
 
 	container.addChild( background, queue, thread, cursor );
@@ -41,5 +42,20 @@ function keyPressed( event )
 	if(event.keyCode == 90)		// z
 	{
 		queue.undo();
+		thread.clear();
 	}
 }
+
+/*
+
+	TODO
+	- animate thread after draw
+	- add additional colors
+	- save
+	- load
+	- pan
+	- zoom
+	- show backing threads
+	- cut thread
+
+*/
