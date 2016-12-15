@@ -96,14 +96,31 @@
 				var point = this.points[i];
 				var tween = createjs.Tween.get(point).to(
 					{x: end.x, y: end.y},
-					200,
+					250 - (4*i),
 					createjs.Ease.quadInOut);
 			}
 
 			p.clear = function()
 			{				
-				this.points = [];
-				this.display.graphics.clear();
+				if( this.points.lenght < 1)
+					return;
+
+				// X coordinate is (x1 + x2) / 2
+				// y coordinate is (y1 + y2) / 2
+
+				// X coordinate is (x1 + x2) * .5
+				// y coordinate is (y1 + y2) * .5
+
+				var start = this.points[0];
+
+				for(var i = 1; i < this.points.length; i++ )
+				{
+					var point = this.points[i];
+					var tween = createjs.Tween.get(point).to(
+						{x: start.x, y: start.y},
+						300,
+						createjs.Ease.quadInOut);
+				}
 			}
 
 		}
