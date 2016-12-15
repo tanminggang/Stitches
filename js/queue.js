@@ -40,13 +40,6 @@
 			//this.update( event );
 		}
 
-		p.getPosition = function()
-		{
-			var point = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
-				point = virtualgrid.PositionToCenterPosition( point.x, point.y);
-		return point;		
-		}
-
 		p.undo = function()
 		{
 			if(drawingPoints.length > 0)

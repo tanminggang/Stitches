@@ -21,13 +21,13 @@ function main()
 	var background = new Background( virtualgrid );
 	var queue = new Queue( virtualgrid );
 	var display = new Display( virtualgrid, queue );
-	//var pointer = new Pointer( virtualgrid );
+	var thread = new Thread( virtualgrid );
 	var cursor = new Cursor( virtualgrid );
 	//pointer = new createjs.Shape();
 	//pointer.x = canvas.width * -.5;
 	//pointer.y = canvas.height * -.5;
 
-	container.addChild( background, queue, cursor, display );
+	container.addChild( background, queue, display, thread, cursor );
 
 	// Listeners
 	// stage.on("tick", update );
