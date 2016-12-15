@@ -48,8 +48,6 @@
 			if( this.points.length <= 0)
 				return;
 
-			weight = 
-
 			this.display.graphics.clear().
 				setStrokeStyle(3,"round").
 				beginStroke(colors.primary).
@@ -98,7 +96,7 @@
 				var point = this.points[i];
 				var tween = createjs.Tween.get(point).to(
 					{x: end.x, y: end.y},
-					10 + 3 * this.points.length - ( 4 * i ),
+					300 - ( 4 * i ),
 					createjs.Ease.quadInOut);
 			}
 

@@ -6,89 +6,41 @@ var colors = {
 	secondary : "#64a33a"
 }
 
-var queue;
-var thread;
-
 function main()
 {
 	// Setup
 	setup();
 
-	// Keyboard
-	document.onkeydown = keyPressed;
-
 	// Virtual Grid
 	var virtualgrid = new VirtualGrid( spacing );
 
 	// Queue and Thread
-	queue = new Queue( virtualgrid );
-	thread = new Thread( virtualgrid );
+	var queue = new Queue( virtualgrid );
+	var thread = new Thread( virtualgrid );
 
 	// Display
 	var background = new Background( virtualgrid );	
 	var cursor = new Cursor( virtualgrid );
+	var drawing = new createjs.Container();
 
-	// Listeners
-	container.addChild( background, queue, thread, cursor );
-	canvas.addEventListener("wheel", this.mouseWheel.bind(this), false );
-	stage.addEventListener("keydown", this.keyDown.bind(this), false );
-	stage.addEventListener("keyup", this.keyUp.bind(this), false );
-	stage.addEventListener("mousemove", this.mouseMove.bind(this), false );
+	// Input
+	var input = new Input( virtualgrid, drawing, background, queue, thread);
+
+	// Add Children
+	container.addChild( drawing );	
+	drawing.addChild( background, queue, thread, cursor );	
 }
 
-function keyPressed( event )
-{
-	//Keycodes found at http://keycode.info
-	switch( event.keyCode )
-	{
-		case 32: 	// 'space'
-			break;	
-		case 90: 	// 'z'
-			queue.undo();
-			thread.clear();		
-			break;
-		case 13: 	// 'enter'
-			container.scaleX = container.scaleY = 1;
-			break;
-		default:
-			console.log( event.keyCode);
 
-	}
-
-
-}
-
-function mouseMove( event )
-{
-
-}
-
-function keyDown( event )
-{
-
-}
-
-function keyUp( event )
-{
-
-}
-
-function mouseWheel( event )
-{
-	var zoom = 1/1.1;
-
-	if(Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)))>0)
-        zoom=1.1;
-
-    container.scaleX = container.scaleY *= zoom;
-}
 
 /*
 
 	TODO
-	- animate thread after draw	
-	- pan
-	- zoom
+	- panning
+	- animate thread removal
+	- try random thread weighting to make it more realistic
+	- add insert/exit points
+	- add thread 'drop shadow'
 	- add additional colors
 	- tweak colors
 	- save
@@ -97,25 +49,5 @@ function mouseWheel( event )
 	- cut thread
 	- design initial dealyo
 	- load initial dealyo
-
-*/
-
-
-/*
-
-	Panning Code
-
-	p.updatePanDelta = function()
-	{
-
-		var wX = Math.floor(this.parent.x / virtualGrid.spacing) * virtualGrid.spacing;
-		var wY = Math.floor(this.parent.y / virtualGrid.spacing) * virtualGrid.spacing;
-
-		this.display.x = -wX;
-		this.display.y = -wY;
-
-		this.vertical.y = -wY;
-		this.horizontal.x = -wX;
-	}
 
 */

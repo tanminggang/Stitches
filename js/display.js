@@ -28,17 +28,28 @@
 			// console.log("update");
 			this.drawing.graphics.clear();
 
-			var points = this.queue.drawingPoints;
-			for(var i = 0; i < points.length; i++)
-			{
-				var point = points[i];
-				var start = point.startPosition.getCenteredPosition();
-				var end = point.endPosition.getCenteredPosition();
 
-				this.drawing.graphics.
+			var points = this.queue.drawingPoints;
+
+			if(points.length <= 0)
+				return;
+
+			var point = points[0];
+			var start = point.startPosition.getCenteredPosition();
+			var end = point.endPosition.getCenteredPosition();
+
+			this.drawing.graphics.
 				setStrokeStyle(3,"round").
 				beginStroke(point.color).
-				moveTo(start.x,start.y).
+				moveTo(start.x,start.y);
+
+			for(var i = 1; i < points.length; i++)
+			{
+				point = points[i];
+				start = point.startPosition.getCenteredPosition();
+				end = point.endPosition.getCenteredPosition();
+
+				
 				lineTo(end.x,end.y).
 				endStroke();
 			}
@@ -47,3 +58,4 @@
 	window.Display = createjs.promote( Display, "Container" );
 
 } () );
+
