@@ -31,23 +31,20 @@ function main()
 	drawing.addChild( background, queue, thread, cursor );	
 }
 
-
-
 /*
 
 	TODO
-	- panning
 	- animate thread removal
 	- try random thread weighting to make it more realistic
 	- add insert/exit points
 	- add thread 'drop shadow'
 	- add additional colors
 	- tweak colors
-	- save
-	- load
 	- show backing threads
 	- cut thread
 	- design initial dealyo
 	- load initial dealyo
+	- save
+	- load	
 
 */
