@@ -6,6 +6,8 @@ var colors = {
 	secondary : "#64a33a"
 }
 
+var queue;
+
 function main()
 {
 	// Setup
@@ -17,17 +19,19 @@ function main()
 	// Virtual Grid
 	var virtualgrid = new VirtualGrid( spacing );
 
+	// Queue
+	queue = new Queue( virtualgrid );
+
 	// Display
-	var background = new Background( virtualgrid );
-	var queue = new Queue( virtualgrid );
-	var display = new Display( virtualgrid, queue );
+	var background = new Background( virtualgrid );	
+	//var display = new Display( virtualgrid, queue );
 	var thread = new Thread( virtualgrid );
 	var cursor = new Cursor( virtualgrid );
 	//pointer = new createjs.Shape();
 	//pointer.x = canvas.width * -.5;
 	//pointer.y = canvas.height * -.5;
 
-	container.addChild( background, queue, display, thread, cursor );
+	container.addChild( background, queue, thread, cursor );
 
 	// Listeners
 	// stage.on("tick", update );
@@ -39,9 +43,14 @@ function main()
 function keyPressed( event )
 {
 	//Keycodes found at http://keycode.info
-	if( event.keyCode == 32 )
+	if( event.keyCode == 32 )	// space
 	{
 		// clip string
+	}
+
+	if(event.keyCode == 90)		// z
+	{
+		queue.undo();
 	}
 }
 

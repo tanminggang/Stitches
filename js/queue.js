@@ -12,7 +12,32 @@
 		p.setup = function()
 		{
 			this.drawingPoints = [];	
+
+			this.drawing = new createjs.Shape();
+			this.addChild( this.drawing );
+
 			this.on("added", this.added );
+		}
+
+		p.update = function()
+		{
+			// console.log("update");
+			this.drawing.graphics.clear();
+
+			var points = this.drawingPoints;
+			for(var i = 0; i < points.length; i++)
+			{
+				var point = points[i];
+				var start = point.startPosition.getCenteredPosition();
+				var end = point.endPosition.getCenteredPosition();
+
+				this.drawing.graphics.
+				setStrokeStyle(3,"round").
+				beginStroke(point.color).
+				moveTo(start.x,start.y).
+				lineTo(end.x,end.y).
+				endStroke();
+			}
 		}
 
 		p.added = function( event )
@@ -37,13 +62,15 @@
 
 			this.currentPoint.SetEndPosition( pt.x, pt.y );
 			this.drawingPoints.push( this.currentPoint );
-			//this.update( event );
+			this.update();
 		}
 
 		p.undo = function()
 		{
-			if(drawingPoints.length > 0)
-				drawingPoints.pop();
+			if(this.drawingPoints.length > 0)
+				this.drawingPoints.pop();
+
+			this.update();
 		}
 
 	window.Queue = createjs.promote( Queue, "Container" );
