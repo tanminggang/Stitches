@@ -4,16 +4,7 @@ var colors = {
 	foreground : "#dbd9d6",
 	primary : "#3a62a3",
 	secondary : "#64a33a"
-	//tertiary : ;
 }
-var isDrawing = false;
-var isDown = false;
-var points = new Array();
-var pressPoint;
-
-var pointer;
-var drawing;
-var virtualgrid;
 
 function main()
 {
@@ -24,27 +15,51 @@ function main()
 	document.onkeydown = keyPressed;
 
 	// Virtual Grid
-	virtualGrid = new VirtualGrid( spacing );
-	var background = new Background( virtualGrid );
-	var cursor = new Cursor( virtualGrid );
+	var virtualgrid = new VirtualGrid( spacing );
 
-	drawing = new createjs.Shape();
-	pointer = new createjs.Shape();
-	pointer.x = canvas.width * -.5;
-	pointer.y = canvas.height * -.5;
+	// Display
+	var background = new Background( virtualgrid );
+	var queue = new Queue( virtualgrid );
+	var display = new Display( virtualgrid, queue );
+	//var pointer = new Pointer( virtualgrid );
+	var cursor = new Cursor( virtualgrid );
+	//pointer = new createjs.Shape();
+	//pointer.x = canvas.width * -.5;
+	//pointer.y = canvas.height * -.5;
 
-	container.addChild( background, drawing, pointer, cursor );
+	container.addChild( background, queue, cursor, display );
 
 	// Listeners
-	stage.on( "tick", update );
-	stage.on("mousedown", pressDown);
-	stage.on("pressup", pressUp);
-	stage.on("pressmove", pressMove);
+	// stage.on("tick", update );
+	// stage.on("mousedown", pressDown);
+	// stage.on("pressup", pressUp);
+	// stage.on("pressmove", pressMove);
 }
 
+function keyPressed( event )
+{
+	//Keycodes found at http://keycode.info
+	if( event.keyCode == 32 )
+	{
+		// clip string
+	}
+}
+
+/*
 function draw()
 {
+	drawing.graphics.clear().
+	setStrokeStyle(5,"round").beginStroke(colors.primary);
 
+	if(points.length <= 0)
+		return;
+
+	drawing.graphics.oveTo(points[0].x, points[0].y);
+
+	for(var i = 1; i < points.length; i++)
+	{
+		drawing.graphics.lineTo(points[i].x,points[i].y);
+	}
 }
 
 function update( event )
@@ -70,29 +85,32 @@ function pressDown( event )
 	{
 		isDrawing = true;
 		isDown = true;
+		points.push( getPosition() );
 	}else{
 		isDown = ( isDown ) ? ( false ) : ( true );
 	}
 
-	pressPoint = virtualGrid.PositionToCenterPosition(stage.mouseX,stage.mouseY);
+	pressPoint = getPosition();
+}
+
+function getPosition()
+{
+	var point = pointer.globalToLocal(stage.mouseX , stage.mouseY);
+		point = virtualgrid.PositionToCenterPosition( point.x, point.y);
+	return point;
 }
 
 function pressUp( event )
 {
-	draw();
+	if(isDown)
+	{
+		points.push( getPosition() );
+		draw();
+	}
 }
 
 function pressMove( event )
 {
 	//beginBitmapStroke
 }
-
-function keyPressed( event )
-{
-	//Keycodes found at http://keycode.info
-	if( event.keyCode == 32 )
-	{
-		isDrawing = false;
-		pointer.graphics.clear();
-	}
-}
+*/

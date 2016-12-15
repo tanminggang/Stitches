@@ -1,6 +1,5 @@
 (function(){
 
-	var id = 0;
 	var pointerSize = 6;
 
 	function Cursor( virtualGrid )
@@ -8,80 +7,46 @@
 		this.Container_constructor();
 
 		this.virtualGrid = virtualGrid;
-		this.id = id++;
-
-		this.outline = null;
-		this.pointer = null;
-		this.display = null;
-		this.lastTool = null;
-		this.position = new Point(0,0);
-
-		this.setup();
-		this.drawCursor();
+		this.setup();		
 	}
 	
 	var p = createjs.extend( Cursor, createjs.Container );
 
-	p.setup = function()
+	p.setup = function()	
 	{
-		this.outline = new createjs.Shape();
-		this.pointer = new createjs.Shape();
-		this.display = new createjs.Text("test", "15px Arial", "black");
+		this.cursor = new createjs.Shape();
+		this.cursor.graphics.clear().
+			beginFill( "#292A25" ).
+			drawCircle(0,0,this.virtualGrid.spacing * .15);
 
-		this.addChild( this.outline, this.pointer );
-		this.on("tick", this.ontick);
+		this.display = new createjs.Shape();
+		this.display.graphics.clear().
+			beginFill( colors.foreground ).
+			drawCircle(0,0,this.virtualGrid.spacing * 0.5);
+
+		this.addChild( this.display, this.cursor );
+
+		this.on("added", this.added );
 	}
 
-	p.drawCursor = function()
-	{
-		var size = this.virtualGrid.spacing;
-		var color = "#292A25";
-
-		var outlineGraphics = new createjs.Graphics();
-			outlineGraphics.clear();
-			outlineGraphics.setStrokeStyle(size * .03,"round");
-			outlineGraphics.setStrokeDash([size * .1,size *.05],0);
-			outlineGraphics.beginStroke( color );
-			outlineGraphics.drawRect(0,0,size,size);
-
-		var pointerGraphics = new createjs.Graphics();
-			pointerGraphics.clear();
-			pointerGraphics.beginFill( color );
-			pointerGraphics.drawCircle(0,0,size * .06);
-
-		this.outline.graphics = outlineGraphics;
-		this.pointer.graphics = pointerGraphics;
+	p.added = function( event )
+	{		
+		this.on("tick", this.update, this);		
 	}
 
-	p.ontick = function( event )
+	p.update = function( event )
 	{
-		if(!this.stage)
-			return;
+		var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
+		var pos = this.virtualGrid.PositionToCenterPosition( pt.x, pt.y );
+		var d = Math.sqrt( (pt.x-pos.x)*(pt.x-pos.x) + (pt.y-pos.y)*(pt.y-pos.y) );
+		var alpha = 1 - (d / (this.virtualGrid.spacing * 0.5));
 
-		var pt = container.globalToLocal(this.stage.mouseX , this.stage.mouseY);
-			// pt.x += this.game.gameContainer.x;
-			// pt.y += this.game.gameContainer.y;
+		this.cursor.x = pt.x;
+		this.cursor.y = pt.y;
 
-		this.pointer.x = pt.x;// + this.app.gameContainer.x;
-		this.pointer.y = pt.y;// + this.app.gameContainer.y;
-
-		this.display.x = this.pointer.x;
-		this.display.y = this.pointer.y + 20;
-
-
-		this.position = this.virtualGrid.PositionToGrid( pt.x, pt.y )
-		var pos = this.virtualGrid.GridToPosition( this.position.x, this.position.y );
-			//pos.x += this.app.gameContainer.x;
-			//pos.y += this.app.gameContainer.y;
-			// pos = this.game.gameContainer.localToGlobal( pos.x, pos.y );
-
-		this.outline.x = pos.x;
-		this.outline.y = pos.y;
-
-		this.display.text = pt.x + "x"+pt.y +"\r\n("+this.position.x+","+this.position.y+")";
-
-
-		//console.log(objs);
+		this.display.x = pos.x;
+		this.display.y = pos.y;
+		this.display.alpha = alpha;
 	}
 
 	window.Cursor = createjs.promote( Cursor, "Container" );
