@@ -96,7 +96,7 @@
 				var point = this.points[i];
 				var tween = createjs.Tween.get(point).to(
 					{x: end.x, y: end.y},
-					250 - (4*i),
+					300 - (4*i),
 					createjs.Ease.quadInOut);
 			}
 
