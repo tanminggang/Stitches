@@ -44,7 +44,6 @@ function main()
 
 	TODO
 	- fix colors and line rendering
-	- link stitch color to 'styleId' so weights and images can be applied
 	- add additional colors
 	- animate thread removal
 	- try random thread weighting to make it more realistic
