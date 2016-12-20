@@ -1,10 +1,9 @@
-function Input( virtualgrid, drawing, background, queue, thread )
+function Input( virtualgrid, drawing, background, display )
 {
 	this.virtualgrid = virtualgrid;
 	this.drawing = drawing;
 	this.background = background;
-	this.queue = queue;
-	this.thread = thread;
+	this.display = display;
 
 	this.spacebarDown = false;
 	this.lastPosition = new Point();
@@ -39,14 +38,17 @@ Input.prototype.mouseMove = function ( event )
 
 Input.prototype.keyDown = function ( event )
 {
-	switch( event.keyCode )
+	switch( event.keyCode )		// http://keycode.info 
 	{
+		case 83: // 's'
+			this.display.save();
+			break;
 		case 32: 	// 'space'
 			this.updateLastPosition();
 			this.spacebarDown = true;
 			break;	
 		case 90: 	// 'z'
-			this.queue.undo();	
+			this.display.undo();	
 			break;
 		case 13: 	// 'enter'
 			container.scaleX = container.scaleY = 1;

@@ -39,6 +39,16 @@ function VirtualPosition( xPosition, yPosition, grid )
 {
 	this.grid = grid;
 	this.rawPosition = new Point(xPosition,yPosition);
+	// set our internal grid position. It will be used for all calculations
+	this.gridPosition = this.grid.PositionToGrid(this.rawPosition.x,this.rawPosition.y)
+}
+
+VirtualPosition.prototype.setGridPosition = function(x,y)
+{
+	this.gridPosition = new Point(x,y);
+	this.rawPosition = this.grid.GridToPosition(x,y);
+	
+	return this.gridPosition;
 }
 
 VirtualPosition.prototype.getRawPosition = function()
@@ -48,25 +58,18 @@ VirtualPosition.prototype.getRawPosition = function()
 
 VirtualPosition.prototype.getGridPosition = function()
 {
-	if(!this.gridPosition)
-		this.gridPosition = this.grid.PositionToGrid(this.rawPosition.x,this.rawPosition.y);
-
 	return this.gridPosition;
 }
 
 VirtualPosition.prototype.getCenteredPosition = function()
 {
-	if(!this.centeredPosition)
-		this.centeredPosition = this.grid.PositionToCenterPosition(this.rawPosition.x,this.rawPosition.y);
-
+	this.centeredPosition = this.grid.GridToCenterPosition(this.gridPosition.x,this.gridPosition.y);
 	return this.centeredPosition;
 }
 
 VirtualPosition.prototype.getPosition = function()
 {
-	if(!this.position)
-		this.position = this.grid.PositionToPosition(this.rawPosition.x,this.rawPosition.y);
-
+	this.position = this.grid.GridToPosition(this.gridPosition.x,this.gridPosition.y);
 	return this.rawPosition;
 }
 

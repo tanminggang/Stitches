@@ -42,11 +42,17 @@ Thread.prototype.endStitch = function(x,y)
 	}
 }
 
+Thread.prototype.clearStitches = function()
+{
+	this.currentStitch = null;
+	this.stitches = [];
+}
+
 Thread.prototype.undoStitch = function()
 {
 	if(this.currentStitch)
 		return;
-	
+
 	if(this.stitches.length > 0)
 		this.stitches.pop();	
 }
@@ -54,6 +60,36 @@ Thread.prototype.undoStitch = function()
 Thread.prototype.getColor = function()
 {
 	return threadStyle[this.styleId];
+}
+
+Thread.prototype.getData = function()
+{
+	var stitchData = [];
+	for( var i = 0; i < this.stitches.length; i++)
+	{
+		stitchData[i] = this.stitches[i].getData();
+	}
+	var data = {
+		styleId : this.styleId,
+		stitchData : stitchData
+	};
+	return data;
+}
+
+Thread.prototype.loadData = function( data )
+{
+	this.clearPoints();
+	this.clearStitches();
+	this.styleId = data.styleId;
+	for(var i = 0; i < data.stitchData.length; i++)
+	{
+		var startGridPosition = data.stitchData[i].startGridPosition;
+		var endGridPosition = data.stitchData[i].endGridPosition;
+		var stitch = new Stitch( this.virtualgrid ); 
+			stitch.loadData( startGridPosition, endGridPosition );
+
+		this.stitches[i] = stitch;
+	}
 }
 
 // ----------------------------------------------------------------
@@ -71,5 +107,23 @@ Stitch.prototype.setStartPosition = function( x, y )
 Stitch.prototype.setEndPosition = function( x, y )
 {
 	this.endPosition = this.virtualgrid.GetVirtualPosition(x,y);
+}
+
+Stitch.prototype.loadData = function(startGridPosition, endGridPosition)
+{
+	this.startPosition = this.virtualgrid.GetVirtualPosition(0,0);
+	this.endPosition = this.virtualgrid.GetVirtualPosition(0,0);
+
+	this.startPosition.setGridPosition( startGridPosition.x, startGridPosition.y );
+	this.endPosition.setGridPosition( endGridPosition.x, endGridPosition.y );
+}
+
+Stitch.prototype.getData = function()
+{
+	var data = {
+		startGridPosition : this.startPosition.getGridPosition(),
+		endGridPosition : this.endPosition.getGridPosition()
+	};
+	return data;
 }
 

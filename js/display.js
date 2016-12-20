@@ -126,6 +126,19 @@
 			this.updateThread();
 		}
 
+		p.save = function()
+		{
+			var data = this.thread.getData();
+			console.log( JSON.stringify( data ) )
+			//console.log(data );
+		}
+
+		p.load = function( data )
+		{
+			this.thread.loadData( JSON.parse(data) );
+			this.updateThread();
+		}
+
 	window.Display = createjs.promote( Display, "Container" );
 
 } () );
