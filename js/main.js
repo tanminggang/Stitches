@@ -1,3 +1,4 @@
+
 var spacing = 10;
 var colors = {
 	background : "#edecea",
@@ -24,8 +25,17 @@ function main()
 	var virtualgrid = new VirtualGrid( spacing );
 
 	// Queue and Thread
-	var queue = new Queue( virtualgrid );
+	var display = new Display( virtualgrid );
 	var thread = new Thread( virtualgrid );
+
+
+	/*
+
+		Queue stores threads.
+		Thread is a data object for a particular thread.
+		Display displays the output of thread.
+
+	*/
 
 	// Display
 	var background = new Background( virtualgrid );	
@@ -33,16 +43,17 @@ function main()
 	var drawing = new createjs.Container();
 
 	// Input
-	var input = new Input( virtualgrid, drawing, background, queue, thread);
+	var input = new Input( virtualgrid, drawing, background, display, thread);
 
 	// Add Children
 	container.addChild( drawing );	
-	drawing.addChild( background, queue, thread, cursor );	
+	drawing.addChild( background, display, thread, cursor );	
 }
 
 /*
 
 	TODO
+	- fix background being off
 	- fix colors and line rendering
 	- add additional colors
 	- animate thread removal

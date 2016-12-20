@@ -18,7 +18,7 @@ function Input( virtualgrid, drawing, background, queue, thread )
 Input.prototype.updateLastPosition = function()
 {
 	this.lastPosition.x = stage.mouseX;
-	this.lastPosition.y = stage.mouseY;	
+this.lastPosition.y = stage.mouseY;	
 }
 
 Input.prototype.mouseMove = function ( event )

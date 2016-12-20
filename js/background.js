@@ -10,15 +10,16 @@
 	var p = createjs.extend( Background, createjs.Container );
         p.setup = function()
         {
-			this.x = canvas.width * -.5;
-			this.y = canvas.height * -.5;
+        	var xy = this.virtualGrid.GetVirtualPosition(canvas.width * -.5,canvas.height * -.5).getCenteredPosition();
+			this.x = xy.x + this.virtualGrid.spacing * 0.5;
+			this.y = xy.y + this.virtualGrid.spacing * 0.5;//canvas.height * -.5;
 			this.display = new createjs.Shape();
 			this.display.graphics.clear();
 			this.display.graphics.beginFill( colors.foreground );
 
-			for( var x = 0; x < canvas.width / spacing; x++ )
+			for( var x = 0; x < canvas.width / this.virtualGrid.spacing; x++ )
 			{
-				for(var y = 0; y < canvas.height / spacing; y++ )
+				for(var y = 0; y < canvas.height / this.virtualGrid.spacing; y++ )
 				{
 					var point = this.virtualGrid.GridToCenterPosition (x,y);
 					this.display.graphics.moveTo( point.x, point.y );
