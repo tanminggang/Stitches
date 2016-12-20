@@ -13,22 +13,32 @@ Thread.prototype.addPoint = function( x,y )
 	this.points.push( point );
 }
 
+Thread.prototype.clearPoints = function(  )
+{
+	this.points = [];
+}
+
 Thread.prototype.startStitch = function(x,y)
 {
 	if(this.currentStitch != null)
-		return;
+		return null;
 
 	this.currentStitch = new Stitch( this.virtualgrid );
 	this.currentStitch.setStartPosition( x,y );
+
+	return this.currentStitch;
 }
 
 Thread.prototype.endStitch = function(x,y)
 {
 	if(this.currentStitch)
 	{
-		this.currentStitch.setEndPosition(x,y);
-		this.stitches.push( this.currentStitch );
+		var stitch = this.currentStitch;
+		stitch.setEndPosition(x,y);
+		this.stitches.push( stitch );
 		this.currentStitch = null;
+
+		return stitch;
 	}
 }
 

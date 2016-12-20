@@ -23,38 +23,65 @@
 		p.added = function( event )
 		{			
 			this.stage.on("stagemousedown", this.pressDown, this);
-			this.stage.on("pressup", this.pressUp, this);
-			this.stage.on("pressmove", this.pressmove, this);					
+			this.stage.on("stagemouseup", this.pressUp, this);
+			this.stage.on("pressmove", this.pressmove, this);
+			this.on("tick", this.update, this);							
+		}
+
+		p.update = function( event )
+		{
+			this.updatePoints();
 		}
 
 		p.pressDown = function( event )
 		{
 			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
-			this.thread.startStitch( pt.x, pt.y);
+			var stitch = this.thread.startStitch( pt.x, pt.y);
+			var point = stitch.startPosition.getCenteredPosition();
 
-			var point = this.thread.currentStitch.startPosition.getCenteredPosition();
+			this.thread.clearPoints();
+
+			this.updateThread();
+
 			this.thread.addPoint( point.x,point.y );
-			
-			this.updatePoints();
 		}
 
 		p.pressUp = function( event )
 		{
 			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
-			this.thread.endStitch( pt.x, pt.y);
-	
-			this.thread.points = [];
+			var stitch = this.thread.endStitch( pt.x, pt.y);
+			var point = stitch.endPosition.getCenteredPosition();
+
+			this.thread.addPoint( point.x,point.y );
 
 			this.updateThread();
-			this.updatePoints();
+			this.animatePoints();
 		}
 
 		p.pressmove = function( event )
 		{	
 			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
-			this.thread.addPoint( pt.x,pt.y );
+			this.thread.addPoint( pt.x,pt.y );	
+		}
 
-			this.updatePoints();		
+		p.updateThread = function()
+		{
+			this.threadDisplay.graphics.clear();
+			this.threadDisplay.graphics.setStrokeStyle(7,"round").beginStroke(this.thread.getColor());
+
+			var offset = (this.thread.points.length > 0) ? (1) : (0);
+			var stitches = this.thread.stitches;
+
+			for( var i = 0; i < stitches.length-offset; i++)
+			{
+				var stitch = stitches[i];
+				var start = stitch.startPosition.getCenteredPosition();
+				var end = stitch.endPosition.getCenteredPosition();
+
+				this.threadDisplay.graphics.
+					moveTo(start.x,start.y).
+					lineTo(end.x,end.y);
+			}
 		}
 
 		p.updatePoints = function()
@@ -77,26 +104,24 @@
 			this.pointsDisplay.graphics.endStroke();
 		}
 
-		p.updateThread = function()
+		p.animatePoints = function()
 		{
-			this.threadDisplay.graphics.clear();
-			this.threadDisplay.graphics.setStrokeStyle(7,"round").beginStroke(this.thread.getColor());
+			var start = this.thread.points[0];
+			var end = this.thread.points[this.thread.points.length-1];
 
-			var stitches = this.thread.stitches;
-			for( var i = 0; i < stitches.length; i++)
+			for(var i = 1; i < this.thread.points.length-1; i++ )
 			{
-				var stitch = stitches[i];
-				var start = stitch.startPosition.getCenteredPosition();
-				var end = stitch.endPosition.getCenteredPosition();
-
-				this.threadDisplay.graphics.
-					moveTo(start.x,start.y).
-					lineTo(end.x,end.y);
+				var point = this.thread.points[i];
+				var tween = createjs.Tween.get(point).to(
+					{x: end.x, y: end.y},
+					300 - ( 4 * i ),
+					createjs.Ease.quadInOut);
 			}
 		}
-		
+
 		p.undo = function()
 		{
+			this.thread.clearPoints();
 			this.thread.undoStitch();
 			this.updateThread();
 		}
