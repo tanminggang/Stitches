@@ -26,7 +26,7 @@ function main()
 
 	// Queue and Thread
 	var display = new Display( virtualgrid );
-	var thread = new Thread( virtualgrid );
+	//var thread = new Thread( virtualgrid );
 
 
 	/*
@@ -47,11 +47,11 @@ function main()
 	var drawing = new createjs.Container();
 
 	// Input
-	var input = new Input( virtualgrid, drawing, background, display, thread);
+	var input = new Input( virtualgrid, drawing, background, display );
 
 	// Add Children
 	container.addChild( drawing );	
-	drawing.addChild( background, display, thread, cursor );	
+	drawing.addChild( background, display, cursor );	
 }
 
 /*

@@ -10,8 +10,8 @@
 	var p = createjs.extend( Display, createjs.Container );
 
 		p.setup = function()
-		{
-			this.drawingPoints = [];	
+		{	
+			this.thread = new Thread( this.virtualgrid, 1);
 
 			this.drawing = new createjs.Shape();
 			this.addChild( this.drawing );
@@ -22,54 +22,68 @@
 		p.added = function( event )
 		{			
 			this.stage.on("stagemousedown", this.pressDown, this);
-			this.stage.on("pressup", this.pressUp, this);	
+			this.stage.on("pressup", this.pressUp, this);
+			this.stage.on("pressmove", this.pressmove, this);					
 		}
 
 		p.pressDown = function( event )
 		{
-			this.updateThread();
-
 			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
-
-			this.currentPoint = new DrawingPoint( this.virtualgrid, threadId );
-			this.currentPoint.SetStartPosition( pt.x, pt.y );
+			this.thread.startStitch( pt.x, pt.y);
 		}
 
 		p.pressUp = function( event )
 		{
-			// console.log("pressup");
 			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
+			this.thread.endStitch( pt.x, pt.y);
+	
+			this.thread.points = [];
+			this.updateThread();
+		}
 
-			this.currentPoint.SetEndPosition( pt.x, pt.y );
-			this.drawingPoints.push( this.currentPoint );
+		p.pressmove = function( event )
+		{	
+			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
+			this.thread.addPoint( pt.x,pt.y );
+
+			this.updateThread();		
 		}
 
 		p.updateThread = function()
 		{
-			// console.log("update");
 			this.drawing.graphics.clear();
+			this.drawing.graphics.setStrokeStyle(7,"round").beginStroke(this.thread.getColor());
 
-			var points = this.drawingPoints;
-			for(var i = 0; i < points.length; i++)
+			var stitches = this.thread.stitches;
+			for( var i = 0; i < stitches.length; i++)
 			{
-				var point = points[i];
-				var start = point.startPosition.getCenteredPosition();
-				var end = point.endPosition.getCenteredPosition();
+				var stitch = stitches[i];
+				var start = stitch.startPosition.getCenteredPosition();
+				var end = stitch.endPosition.getCenteredPosition();
 
 				this.drawing.graphics.
-				setStrokeStyle(7,"round").
-				beginStroke(point.GetColor()).
-				moveTo(start.x,start.y).
-				lineTo(end.x,end.y).
-				endStroke();
+					moveTo(start.x,start.y).
+					lineTo(end.x,end.y);
 			}
+
+			if(this.thread.points.length <=  0)
+				return;
+
+			this.drawing.graphics.moveTo( this.thread.points[0].x, this.thread.points[0].y);
+			for( var i = 0; i < this.thread.points.length; i++)
+			{
+				var point = this.thread.points[i];
+
+				this.drawing.graphics.lineTo(point.x,point.y);
+
+			}
+
+			this.drawing.graphics.endStroke();
 		}
 		
 		p.undo = function()
 		{
-			if(this.drawingPoints.length > 0)
-				this.drawingPoints.pop();
-
+			this.thread.undoStitch();
 			this.updateThread();
 		}
 

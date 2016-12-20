@@ -46,8 +46,7 @@ Input.prototype.keyDown = function ( event )
 			this.spacebarDown = true;
 			break;	
 		case 90: 	// 'z'
-			this.queue.undo();
-			this.thread.clear();		
+			this.queue.undo();	
 			break;
 		case 13: 	// 'enter'
 			container.scaleX = container.scaleY = 1;
