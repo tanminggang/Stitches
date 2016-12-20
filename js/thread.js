@@ -83,10 +83,8 @@ Thread.prototype.loadData = function( data )
 	this.styleId = data.styleId;
 	for(var i = 0; i < data.stitchData.length; i++)
 	{
-		var startGridPosition = data.stitchData[i].startGridPosition;
-		var endGridPosition = data.stitchData[i].endGridPosition;
 		var stitch = new Stitch( this.virtualgrid ); 
-			stitch.loadData( startGridPosition, endGridPosition );
+			stitch.loadData( data.stitchData[i] );
 
 		this.stitches[i] = stitch;
 	}
@@ -109,8 +107,11 @@ Stitch.prototype.setEndPosition = function( x, y )
 	this.endPosition = this.virtualgrid.GetVirtualPosition(x,y);
 }
 
-Stitch.prototype.loadData = function(startGridPosition, endGridPosition)
+Stitch.prototype.loadData = function( data )
 {
+	var startGridPosition = data.startGridPosition;
+	var endGridPosition = data.endGridPosition;
+
 	this.startPosition = this.virtualgrid.GetVirtualPosition(0,0);
 	this.endPosition = this.virtualgrid.GetVirtualPosition(0,0);
 
