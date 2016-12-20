@@ -24,7 +24,7 @@
 		{			
 			this.stage.on("stagemousedown", this.pressDown, this);
 			this.stage.on("stagemouseup", this.pressUp, this);
-			this.stage.on("pressmove", this.pressmove, this);
+			this.stage.on("stagemousemove", this.pressMove, this);
 			this.on("tick", this.update, this);							
 		}
 
@@ -39,11 +39,16 @@
 			var stitch = this.thread.startStitch( pt.x, pt.y);
 			var point = stitch.startPosition.getCenteredPosition();
 
+			this.lastPoint = pt;
 			this.thread.clearPoints();
 
 			this.updateThread();
 
+
 			this.thread.addPoint( point.x,point.y );
+			this.thread.addPoint( point.x,point.y );
+
+			this.isPressing = true;
 		}
 
 		p.pressUp = function( event )
@@ -54,14 +59,35 @@
 
 			this.thread.addPoint( point.x,point.y );
 
+			//DISCO CODE
+			//this.thread.styleId = (this.thread.styleId + 1 ) % 4;
+
 			this.updateThread();
 			this.animatePoints();
+
+			this.isPressing = false;
 		}
 
-		p.pressmove = function( event )
+		p.pressMove = function( event )
 		{	
+
+			if( !this.isPressing )
+				return;
+
 			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
-			this.thread.addPoint( pt.x,pt.y );	
+			
+			var sqrDistance = ( (pt.x - this.lastPoint.x) * (pt.x - this.lastPoint.x) + 
+			(pt.y - this.lastPoint.y) * (pt.y - this.lastPoint.y) )
+
+			if( sqrDistance > 200 )
+			{
+				this.thread.addPoint( pt.x,pt.y );	
+				this.lastPoint = pt;
+			} else {
+				var point = this.thread.points[ this.thread.points.length - 1 ];
+					point.x = pt.x;
+					point.y = pt.y;
+			}
 		}
 
 		p.updateThread = function()
@@ -87,17 +113,23 @@
 		p.updatePoints = function()
 		{
 			this.pointsDisplay.graphics.clear();
-			this.pointsDisplay.graphics.setStrokeStyle(7,"round").beginStroke(this.thread.getColor());
+			this.pointsDisplay.graphics.setStrokeStyle(7, "round").beginStroke(this.thread.getColor());
 
 			if(this.thread.points.length <=  0)
 			return;
 
 			this.pointsDisplay.graphics.moveTo( this.thread.points[0].x, this.thread.points[0].y);
-			for( var i = 0; i < this.thread.points.length; i++)
+			var lastPoint = this.thread.points[0];
+			var lastMidPoint = lastPoint;
+			for( var i = 1; i < this.thread.points.length; i++)
 			{
 				var point = this.thread.points[i];
+				var midPoint = point.add( lastPoint ).scale( .5 );
+				this.pointsDisplay.graphics.moveTo( midPoint.x, midPoint.y )
+					.curveTo(lastPoint.x, lastPoint.y, lastMidPoint.x, lastMidPoint.y );
 
-				this.pointsDisplay.graphics.lineTo(point.x,point.y);
+				lastPoint = point;
+				lastMidPoint = midPoint;
 
 			}
 
@@ -169,7 +201,7 @@
 							reader.onload = function(event)
 							{
 								var contents = event.target.result;
-								
+
 								self.load( contents );
 
 								cleanup();
