@@ -20,9 +20,6 @@ Thread.prototype.startStitch = function(x,y)
 
 	this.currentStitch = new Stitch( this.virtualgrid );
 	this.currentStitch.setStartPosition( x,y );
-	var point = this.currentStitch.startPosition.getCenteredPosition();
-
-	this.addPoint( point.x,point.y );
 }
 
 Thread.prototype.endStitch = function(x,y)
