@@ -40,13 +40,19 @@ Input.prototype.keyDown = function ( event )
 {
 	switch( event.keyCode )		// http://keycode.info 
 	{
-		case 83: // 's'
+		case 76: 	// 'l'
+			this.display.loadFile();
+			break;
+		case 83: 	// 's'
 			this.display.save();
 			break;
 		case 32: 	// 'space'
 			this.updateLastPosition();
 			this.spacebarDown = true;
-			break;	
+			break;
+		case 67: 	// 'c'	
+			this.display.clear();
+			break;
 		case 90: 	// 'z'
 			this.display.undo();	
 			break;

@@ -13,6 +13,12 @@ Thread.prototype.addPoint = function( x,y )
 	this.points.push( point );
 }
 
+Thread.prototype.clearAll = function()
+{
+	this.clearPoints();
+	this.clearStitches();	
+}
+
 Thread.prototype.clearPoints = function(  )
 {
 	this.points = [];
@@ -78,8 +84,7 @@ Thread.prototype.getData = function()
 
 Thread.prototype.loadData = function( data )
 {
-	this.clearPoints();
-	this.clearStitches();
+	this.clearAll();
 	this.styleId = data.styleId;
 	for(var i = 0; i < data.stitchData.length; i++)
 	{
