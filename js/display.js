@@ -57,7 +57,7 @@
 				var end = point.endPosition.getCenteredPosition();
 
 				this.drawing.graphics.
-				setStrokeStyle(2,"round").
+				setStrokeStyle(7,"round").
 				beginStroke(point.GetColor()).
 				moveTo(start.x,start.y).
 				lineTo(end.x,end.y).

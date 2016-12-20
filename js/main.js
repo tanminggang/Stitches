@@ -2,7 +2,7 @@
 var spacing = 10;
 var colors = {
 	background : "#edecea",
-	foreground : "#dbd9d6",
+	foreground : "#d6d4d1",
 	primary : "#3a62a3",
 	secondary : "#64a33a"
 }
@@ -31,8 +31,12 @@ function main()
 
 	/*
 
-		Queue stores threads.
 		Thread is a data object for a particular thread.
+			- has start, end
+			- has drawing points
+
+		Queue stores threads.
+
 		Display displays the output of thread.
 
 	*/
@@ -53,6 +57,8 @@ function main()
 /*
 
 	TODO
+	- need delete
+	- need seperate lines
 	- fix background being off
 	- fix colors and line rendering
 	- add additional colors
