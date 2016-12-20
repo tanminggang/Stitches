@@ -164,60 +164,6 @@
 			this.updateThread();
 		}
 
-		p.save = function()
-		{
-			var data = this.thread.getData();
-			var blob = new Blob([ JSON.stringify( data )], {type:"text/json"});
-			saveAs( blob, "stitch.json" );
-			//console.log( JSON.stringify( data ) )
-			//console.log(data );
-		}
-
-		p.load = function( data )
-		{
-			this.thread.loadData( JSON.parse(data) );
-			this.updateThread();
-		}
-
-		p.loadFile = function()
-		{
-			var self = this;
-			var browser = document.createElement("input");
-				browser.type = "file";
-				browser.accept = "text/json";
-
-				function cleanup()
-				{
-					document.body.removeChild( browser );
-				}
-
-				browser.onchange = function(event)
-				{
-					var file = event.target.files[0];
-
-					if( file != null )
-					{
-						var reader = new FileReader();
-							reader.onload = function(event)
-							{
-								var contents = event.target.result;
-
-								self.load( contents );
-
-								cleanup();
-							}
-
-							reader.readAsText( file );
-
-					} else {
-						cleanup();
-					}
-			}
-
-			document.body.appendChild( browser );
-			browser.click();			
-		}
-
 	window.Display = createjs.promote( Display, "Container" );
 
 } () );

@@ -41,10 +41,10 @@ Input.prototype.keyDown = function ( event )
 	switch( event.keyCode )		// http://keycode.info 
 	{
 		case 76: 	// 'l'
-			this.display.loadFile();
+			this.loadFile();
 			break;
 		case 83: 	// 's'
-			this.display.save();
+			this.save();
 			break;
 		case 32: 	// 'space'
 			this.updateLastPosition();
@@ -86,4 +86,58 @@ Input.prototype.mouseWheel = function ( event )
         zoom=1.1;
 
     container.scaleX = container.scaleY *= zoom;
+}
+
+Input.prototype.save = function()
+{
+	var data = this.display.thread.getData();
+	var blob = new Blob([ JSON.stringify( data )], {type:"text/json"});
+	saveAs( blob, "stitch.json" );
+	//console.log( JSON.stringify( data ) )
+	//console.log(data );
+}
+
+Input.prototype.load = function( data )
+{
+	this.display.thread.loadData( JSON.parse(data) );
+	this.display.updateThread();
+}
+
+Input.prototype.loadFile = function()
+{
+	var self = this;
+	var browser = document.createElement("input");
+		browser.type = "file";
+		browser.accept = "text/json";
+
+		function cleanup()
+		{
+			document.body.removeChild( browser );
+		}
+
+		browser.onchange = function(event)
+		{
+			var file = event.target.files[0];
+
+			if( file != null )
+			{
+				var reader = new FileReader();
+					reader.onload = function(event)
+					{
+						var contents = event.target.result;
+
+						self.load( contents );
+
+						cleanup();
+					}
+
+					reader.readAsText( file );
+
+			} else {
+				cleanup();
+			}
+	}
+
+	document.body.appendChild( browser );
+	browser.click();			
 }
