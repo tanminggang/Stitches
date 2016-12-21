@@ -14,15 +14,18 @@
 			this.thread = new Thread( this.virtualgrid, 1);
 
 			this.threadDisplay = new createjs.Shape();
+			this.accentThreadDisplay = new createjs.Shape();
+			this.accentThreadDisplay.compositeOperation = 'lighter';
+			this.accentThreadDisplay.alpha = 0.5;
 			this.pointsDisplay = new createjs.Shape();
-			this.addChild( this.threadDisplay, this.pointsDisplay );
+			this.addChild( this.threadDisplay, this.pointsDisplay, this.accentThreadDisplay );
 
 
 			this.on("added", this.added );
 
 			// TESTING
-			// this.image = new Image();
-   //      	this.image.src = "imgs/thread.png";
+			this.image = new Image();
+        	this.image.src = "imgs/thread_test.png";
 		}
 
 
@@ -101,6 +104,7 @@
 			this.threadDisplay.graphics.clear();
 			this.threadDisplay.graphics.setStrokeStyle(7,"round").beginStroke(this.thread.getColor());
 
+
 			var offset = (this.thread.points.length > 0) ? (1) : (0);
 			var stitches = this.thread.stitches;
 
@@ -123,12 +127,18 @@
 			this.pointsDisplay.graphics.beginStroke(this.thread.getColor());
 			//console.log(this.image );
 			//if(this.image )
-			//this.pointsDisplay.graphics.beginBitmapStroke ( this.image , "repeat" ).drawRect(0,0,20,20);
+			//this.pointsDisplay.graphics.beginStroke("rgba(255,255,255,0.1)");
+
+			this.accentThreadDisplay.graphics.clear();
+			this.accentThreadDisplay.graphics.setStrokeStyle(7, "round");
+			this.accentThreadDisplay.graphics.beginBitmapStroke ( this.image , "repeat" ).drawRect(0,0,20,20);
 
 			if(this.thread.points.length <=  0)
 			return;
 
 			this.pointsDisplay.graphics.moveTo( this.thread.points[0].x, this.thread.points[0].y);
+			this.accentThreadDisplay.graphics.moveTo( this.thread.points[0].x, this.thread.points[0].y);
+
 			var lastPoint = this.thread.points[0];
 			var lastMidPoint = lastPoint;
 			for( var i = 1; i < this.thread.points.length; i++)
@@ -137,6 +147,10 @@
 				var midPoint = point.add( lastPoint ).scale( .5 );
 				this.pointsDisplay.graphics.moveTo( midPoint.x, midPoint.y )
 					.curveTo(lastPoint.x, lastPoint.y, lastMidPoint.x, lastMidPoint.y );
+
+				this.accentThreadDisplay.graphics.moveTo( midPoint.x, midPoint.y )
+					.curveTo(lastPoint.x, lastPoint.y, lastMidPoint.x, lastMidPoint.y );
+
 
 				lastPoint = point;
 				lastMidPoint = midPoint;
