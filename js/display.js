@@ -21,8 +21,8 @@
 			this.accentThreadDisplay.alpha = 0.5;
 
 			this.accentThreadDisplay2 = new createjs.Shape();
-			this.accentThreadDisplay2.compositeOperation = 'lighter';
-			this.accentThreadDisplay2.alpha = 0.1;
+			this.accentThreadDisplay2.compositeOperation = 'screen';
+			this.accentThreadDisplay2.alpha = 0.3;
 
 			this.pointsDisplay = new createjs.Shape();
 			this.addChild( this.threadDisplay, this.pointsDisplay, this.accentThreadDisplay, this.divotDisplay, this.accentThreadDisplay2 );
@@ -116,7 +116,7 @@
 		//	this.divotDisplay.graphics.clear();
 
 			this.accentThreadDisplay2.graphics.clear();
-			this.accentThreadDisplay2.graphics.setStrokeStyle(7, "round");
+			this.accentThreadDisplay2.graphics.setStrokeStyle(5, "round");
 			this.accentThreadDisplay2.graphics.beginBitmapStroke ( this.image , "repeat" ).drawRect(0,0,20,20);
 
 			var offset = (this.thread.points.length > 0) ? (1) : (0);
@@ -138,7 +138,7 @@
 
 				//SHADOW
 				this.threadDisplay.graphics
-					.setStrokeStyle(8,"round")
+					.setStrokeStyle(7,"round")
 					.setStrokeDash()
 					.beginStroke( "rgba(0,0,0,.1)" );
 
@@ -149,19 +149,19 @@
 
 
 				//shade
-				this.threadDisplay.graphics
-					.setStrokeStyle(6,"round")
-					.beginStroke( tinycolor( this.thread.getColor() ).darken(10).toHexString() );
+				// this.threadDisplay.graphics
+				// 	.setStrokeStyle(6,"round")
+				// 	.beginStroke( tinycolor( this.thread.getColor() ).darken(12).toHexString() );
 
-				this.threadDisplay.graphics
-					.moveTo(start.x,start.y)
-					.lineTo(end.x,end.y)
-					.endStroke();
+				// this.threadDisplay.graphics
+				// 	.moveTo(start.x,start.y)
+				// 	.lineTo(end.x,end.y)
+				// 	.endStroke();
 
 
 				//body
 				this.threadDisplay.graphics
-					.setStrokeStyle(4,"round")
+					.setStrokeStyle(5,"round")
 					.beginStroke(this.thread.getColor());
 
 				this.threadDisplay.graphics
@@ -172,18 +172,22 @@
 
 				//highlight
 				this.threadDisplay.graphics
-					.setStrokeStyle(.5,"round")
-					.beginStroke( tinycolor( this.thread.getColor() ).lighten(20).saturate(35).toHexString() );
+					.setStrokeStyle(3,"round")
+					.beginStroke( tinycolor( this.thread.getColor() ).lighten(20).saturate(5).toHexString() );
 
 				this.threadDisplay.graphics
 					.moveTo(start.x,start.y)
-					.lineTo(end.x,end.y);
-					//.endStroke();
-
-				this.threadDisplay.graphics
-					.moveTo(start.x,start.y - 2)
-					.lineTo(end.x,end.y - 2)
+					.lineTo(end.x,end.y)
 					.endStroke();
+
+				// this.threadDisplay.graphics
+				// 	.moveTo(start.x,start.y + 2)
+				// 	.lineTo(end.x,end.y +2)
+
+				// this.threadDisplay.graphics
+				// 	.moveTo(start.x,start.y - 3)
+				// 	.lineTo(end.x,end.y - 2)
+				// 	.endStroke();
 
 			}
 		}

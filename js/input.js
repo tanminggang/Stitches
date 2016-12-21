@@ -86,7 +86,7 @@ Input.prototype.mouseWheel = function ( event )
         zoom=1.1;
 
     var scale = container.scaleX * zoom;
-	scale = Math.max(1, Math.min(scale, 10) );
+	scale = Math.max(1, Math.min(scale, 3) );
 
 	container.scaleX = container.scaleY = scale;
 }
