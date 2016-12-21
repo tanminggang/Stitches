@@ -21,9 +21,9 @@
 			this.display.graphics.clear();
 			this.display.graphics.beginFill( colors.foreground );
 
-			for( var x = 0; x < canvas.width / this.virtualGrid.spacing; x++ )
+			for( var x = 0; x < Math.ceil(canvas.width / this.virtualGrid.spacing); x++ )
 			{
-				for(var y = 0; y < canvas.height / this.virtualGrid.spacing; y++ )
+				for(var y = 0; y < Math.ceil(canvas.height / this.virtualGrid.spacing); y++ )
 				{
 					var point = this.virtualGrid.GridToCenterPosition (x,y);
 					this.display.graphics.moveTo( point.x, point.y );
@@ -43,8 +43,11 @@
 				matrix.scale(.1, .1);
 				matrix.translate(-50,50);
 
+
+			var padding = 50;
+
 			this.pattern.graphics.beginBitmapFill(this.bitmap.image, "repeat", matrix)
-				.drawRect(0, 0, canvas.width, canvas.height)
+				.drawRect(-padding, -padding, canvas.width + 2*padding, canvas.height + 2*padding)
 				.endFill();
 
 			this.addChild( this.pattern, this.display );
