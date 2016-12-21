@@ -14,9 +14,7 @@
 	var p = createjs.extend( Background, createjs.Container );
         p.setup = function()
         {
-        	var xy = this.virtualGrid.GetVirtualPosition(canvas.width * -.5,canvas.height * -.5).getCenteredPosition();
-			this.x = xy.x + this.virtualGrid.spacing * 0.5;
-			this.y = xy.y + this.virtualGrid.spacing * 0.5;//canvas.height * -.5;
+        /*
 			this.display = new createjs.Shape();
 			this.display.graphics.clear();
 			this.display.graphics.beginFill( colors.foreground );
@@ -34,9 +32,13 @@
 			this.display.cache(0,0,canvas.width,canvas.height);
 
 
+*/
 
-			this.pattern = new createjs.Shape();
-			this.pattern.graphics.clear();
+			var xy = this.virtualGrid.GetVirtualPosition(canvas.width * -.5,canvas.height * -.5).getCenteredPosition();
+				this.x = xy.x + this.virtualGrid.spacing * 0.5;
+				this.y = xy.y + this.virtualGrid.spacing * 0.5;//canvas.height * -.5;
+				this.pattern = new createjs.Shape();
+				this.pattern.graphics.clear();
 
 
 			var matrix = new createjs.Matrix2D();
@@ -50,7 +52,8 @@
 				.drawRect(-padding, -padding, canvas.width + 2*padding, canvas.height + 2*padding)
 				.endFill();
 
-			this.addChild( this.pattern, this.display );
+
+			this.addChild( this.pattern  );
 
 		}
 
@@ -59,8 +62,8 @@
 			var wX = Math.floor(this.parent.x / this.virtualGrid.spacing) * this.virtualGrid.spacing;
 			var wY = Math.floor(this.parent.y / this.virtualGrid.spacing) * this.virtualGrid.spacing;
 
-			this.display.x = -wX;
-			this.display.y = -wY;
+			// this.display.x = -wX;
+			// this.display.y = -wY;
 
 			this.pattern.x = -wX;
 			this.pattern.y = -wY;

@@ -25,7 +25,7 @@
 			this.accentThreadDisplay2.alpha = 0.1;
 
 			this.pointsDisplay = new createjs.Shape();
-			this.addChild( this.threadDisplay, this.pointsDisplay, this.accentThreadDisplay, this.accentThreadDisplay2 );
+			this.addChild( this.threadDisplay, this.pointsDisplay, this.accentThreadDisplay, this.divotDisplay, this.accentThreadDisplay2 );
 
 
 			this.on("added", this.added );
@@ -113,11 +113,11 @@
 
 			this.threadDisplay.graphics.clear();
 
+		//	this.divotDisplay.graphics.clear();
+
 			this.accentThreadDisplay2.graphics.clear();
 			this.accentThreadDisplay2.graphics.setStrokeStyle(7, "round");
 			this.accentThreadDisplay2.graphics.beginBitmapStroke ( this.image , "repeat" ).drawRect(0,0,20,20);
-
-
 
 			var offset = (this.thread.points.length > 0) ? (1) : (0);
 			var stitches = this.thread.stitches;
@@ -169,21 +169,8 @@
 					.lineTo(end.x,end.y)
 					.endStroke();
 
-				//highlight
-				this.threadDisplay.graphics
-					.setStrokeStyle(.5,"round")
-					.setStrokeDash([4,3], i )
-					.beginStroke( tinycolor( this.thread.getColor() ).lighten(20).saturate(10).toHexString() );
 
-				this.threadDisplay.graphics
-					.moveTo(start.x,start.y)
-					.lineTo(end.x,end.y);
-					//.endStroke();
 
-				this.threadDisplay.graphics
-					.moveTo(start.x,start.y - 2)
-					.lineTo(end.x,end.y - 2)
-					.endStroke();
 			}
 		}
 
