@@ -6,12 +6,14 @@
 		this.virtualgrid = virtualgrid;
 		this.setup();
 	}
-	
+
 	var p = createjs.extend( Display, createjs.Container );
 
 		p.setup = function()
-		{	
+		{
 			this.thread = new Thread( this.virtualgrid, 1);
+
+			//this.shadowDisplay = new createjs.Shape();
 
 			this.threadDisplay = new createjs.Shape();
 			this.accentThreadDisplay = new createjs.Shape();
@@ -30,11 +32,11 @@
 
 
 		p.added = function( event )
-		{			
+		{
 			this.stage.on("stagemousedown", this.pressDown, this);
 			this.stage.on("stagemouseup", this.pressUp, this);
 			this.stage.on("stagemousemove", this.pressMove, this);
-			this.on("tick", this.update, this);							
+			this.on("tick", this.update, this);
 		}
 
 		p.update = function( event )
@@ -69,7 +71,7 @@
 			this.thread.addPoint( point.x,point.y );
 
 			//DISCO CODE
-			this.thread.styleId = (this.thread.styleId + 1 ) % 4;
+			//this.thread.styleId = (this.thread.styleId + 1 ) % 4;
 
 			this.updateThread();
 			this.animatePoints();
@@ -78,19 +80,19 @@
 		}
 
 		p.pressMove = function( event )
-		{	
+		{
 
 			if( !this.isPressing )
 				return;
 
 			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
-			
-			var sqrDistance = ( (pt.x - this.lastPoint.x) * (pt.x - this.lastPoint.x) + 
+
+			var sqrDistance = ( (pt.x - this.lastPoint.x) * (pt.x - this.lastPoint.x) +
 			(pt.y - this.lastPoint.y) * (pt.y - this.lastPoint.y) )
 
 			if( sqrDistance > 200 )
 			{
-				this.thread.addPoint( pt.x,pt.y );	
+				this.thread.addPoint( pt.x,pt.y );
 				this.lastPoint = pt;
 			} else {
 				var point = this.thread.points[ this.thread.points.length - 1 ];
@@ -101,8 +103,12 @@
 
 		p.updateThread = function()
 		{
+
+
+
 			this.threadDisplay.graphics.clear();
-			this.threadDisplay.graphics.setStrokeStyle(7,"round").beginStroke(this.thread.getColor());
+
+
 
 
 			var offset = (this.thread.points.length > 0) ? (1) : (0);
@@ -114,9 +120,55 @@
 				var start = stitch.startPosition.getCenteredPosition();
 				var end = stitch.endPosition.getCenteredPosition();
 
-				this.threadDisplay.graphics.
-					moveTo(start.x,start.y).
-					lineTo(end.x,end.y);
+
+
+				//SHADOW
+				this.threadDisplay.graphics
+					.setStrokeStyle(12,"round")
+					.beginStroke( "rgba(0,0,0,.1)" );
+
+				this.threadDisplay.graphics
+					.moveTo(start.x,start.y)
+					.lineTo(end.x,end.y)
+					.endStroke();
+
+
+				//shade
+				this.threadDisplay.graphics
+					.setStrokeStyle(8,"round")
+					.beginStroke( tinycolor( this.thread.getColor() ).darken(10).toHexString() );
+
+				this.threadDisplay.graphics
+					.moveTo(start.x,start.y)
+					.lineTo(end.x,end.y)
+					.endStroke();
+
+
+				//body
+				this.threadDisplay.graphics
+					.setStrokeStyle(5,"round")
+					.beginStroke(this.thread.getColor());
+
+				this.threadDisplay.graphics
+					.moveTo(start.x,start.y)
+					.lineTo(end.x,end.y)
+					.endStroke();
+
+				//highlight
+				this.threadDisplay.graphics
+					.setStrokeStyle(1,"round")
+					.setStrokeDash([4,3],0)
+					.beginStroke( tinycolor( this.thread.getColor() ).lighten(20).saturate(10).toHexString() );
+
+				this.threadDisplay.graphics
+					.moveTo(start.x,start.y)
+					.lineTo(end.x,end.y);
+					//.endStroke();
+
+				this.threadDisplay.graphics
+					.moveTo(start.x,start.y - 2)
+					.lineTo(end.x,end.y - 2)
+					.endStroke();
 			}
 		}
 
