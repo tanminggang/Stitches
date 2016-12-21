@@ -9,15 +9,15 @@ function Input( virtualgrid, drawing, background, display )
 	this.lastPosition = new Point();
 	// Listeners
 	window.addEventListener("keydown", this.keyDown.bind(this), false );
-	window.addEventListener("keyup", this.keyUp.bind(this), false );	
-	canvas.addEventListener("wheel", this.mouseWheel.bind(this), false );	
+	window.addEventListener("keyup", this.keyUp.bind(this), false );
+	canvas.addEventListener("wheel", this.mouseWheel.bind(this), false );
 	stage.addEventListener("stagemousemove", this.mouseMove.bind(this), false );
 }
 
 Input.prototype.updateLastPosition = function()
 {
 	this.lastPosition.x = stage.mouseX;
-this.lastPosition.y = stage.mouseY;	
+this.lastPosition.y = stage.mouseY;
 }
 
 Input.prototype.mouseMove = function ( event )
@@ -32,13 +32,13 @@ Input.prototype.mouseMove = function ( event )
 	this.drawing.y += deltaPosition.y;
 
 	this.background.updatePanDelta();
-	
+
 	this.updateLastPosition();
 }
 
 Input.prototype.keyDown = function ( event )
 {
-	switch( event.keyCode )		// http://keycode.info 
+	switch( event.keyCode )		// http://keycode.info
 	{
 		case 76: 	// 'l'
 			this.loadFile();
@@ -50,11 +50,11 @@ Input.prototype.keyDown = function ( event )
 			this.updateLastPosition();
 			this.spacebarDown = true;
 			break;
-		case 67: 	// 'c'	
+		case 67: 	// 'c'
 			this.display.clear();
 			break;
 		case 90: 	// 'z'
-			this.display.undo();	
+			this.display.undo();
 			break;
 		case 13: 	// 'enter'
 			container.scaleX = container.scaleY = 1;
@@ -67,7 +67,7 @@ Input.prototype.keyDown = function ( event )
 	if(event.keyCode >= 49 && event.keyCode <= 57 )
 	{
 		var id = event.keyCode - 48;
-		
+
 		if(id < threadStyle.length)
 			threadId = id;
 	}
@@ -85,7 +85,10 @@ Input.prototype.mouseWheel = function ( event )
 	if(Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)))>0)
         zoom=1.1;
 
-    container.scaleX = container.scaleY *= zoom;
+    var scale = container.scaleX * zoom;
+	scale = Math.max(1, Math.min(scale, 10) );
+
+	container.scaleX = container.scaleY = scale;
 }
 
 Input.prototype.save = function()
@@ -139,5 +142,5 @@ Input.prototype.loadFile = function()
 	}
 
 	document.body.appendChild( browser );
-	browser.click();			
+	browser.click();
 }

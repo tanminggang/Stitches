@@ -42,7 +42,7 @@ function main()
 	*/
 
 	// Display
-	var background = new Background( virtualgrid );	
+	var background = new Background( virtualgrid );
 	var cursor = new Cursor( virtualgrid );
 	var drawing = new createjs.Container();
 
@@ -50,7 +50,7 @@ function main()
 	var input = new Input( virtualgrid, drawing, background, display );
 
 	// Add Children
-	container.addChild( drawing );	
+	container.addChild( drawing );
 	drawing.addChild( background, display, cursor );
 
 	// Demo Data Load
@@ -76,6 +76,6 @@ function main()
 	- design initial dealyo
 	- load initial dealyo
 	- save
-	- load	
+	- load
 
 */

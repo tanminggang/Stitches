@@ -4,6 +4,10 @@
 	{
 		this.Container_constructor();
 		this.virtualGrid = virtualGrid;
+
+
+		this.backgroundStyle = document.getElementsByTagName("body")[0].style;
+		this.bitmap = new createjs.Bitmap("imgs/aida.png");
 		this.setup();
 	}
 
@@ -28,8 +32,24 @@
 			}
 
 			this.display.cache(0,0,canvas.width,canvas.height);
-			this.addChild( this.display );
-        }
+
+
+
+			this.pattern = new createjs.Shape();
+			this.pattern.graphics.clear();
+
+
+			var matrix = new createjs.Matrix2D();
+				matrix.scale(.1, .1);
+				matrix.translate(-50,50);
+
+			this.pattern.graphics.beginBitmapFill(this.bitmap.image, "repeat", matrix)
+				.drawRect(0, 0, canvas.width, canvas.height)
+				.endFill();
+
+			this.addChild( this.pattern, this.display );
+
+		}
 
         p.updatePanDelta = function()
 		{
@@ -38,6 +58,15 @@
 
 			this.display.x = -wX;
 			this.display.y = -wY;
+
+			this.pattern.x = -wX;
+			this.pattern.y = -wY;
+		}
+
+		p.updateZoom = function( zoom )
+		{
+			var zoomString = (140 * zoom) + "px";
+			this.backgroundStyle.backgroundSize = zoomString + " " + zoomString;
 		}
 
     window.Background = createjs.promote( Background, "Container" );
