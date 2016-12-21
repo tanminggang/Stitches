@@ -17,8 +17,14 @@
 			this.pointsDisplay = new createjs.Shape();
 			this.addChild( this.threadDisplay, this.pointsDisplay );
 
+
 			this.on("added", this.added );
+
+			// TESTING
+			// this.image = new Image();
+   //      	this.image.src = "imgs/thread.png";
 		}
+
 
 		p.added = function( event )
 		{			
@@ -60,7 +66,7 @@
 			this.thread.addPoint( point.x,point.y );
 
 			//DISCO CODE
-			//this.thread.styleId = (this.thread.styleId + 1 ) % 4;
+			this.thread.styleId = (this.thread.styleId + 1 ) % 4;
 
 			this.updateThread();
 			this.animatePoints();
@@ -113,7 +119,11 @@
 		p.updatePoints = function()
 		{
 			this.pointsDisplay.graphics.clear();
-			this.pointsDisplay.graphics.setStrokeStyle(7, "round").beginStroke(this.thread.getColor());
+			this.pointsDisplay.graphics.setStrokeStyle(7, "round");
+			this.pointsDisplay.graphics.beginStroke(this.thread.getColor());
+			//console.log(this.image );
+			//if(this.image )
+			//this.pointsDisplay.graphics.beginBitmapStroke ( this.image , "repeat" ).drawRect(0,0,20,20);
 
 			if(this.thread.points.length <=  0)
 			return;
