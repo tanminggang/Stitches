@@ -32,7 +32,7 @@
 
 			// TESTING
 			this.image = new Image();
-        	this.image.src = "imgs/thread_test.png";
+        	this.image.src = "imgs/cheap_diagonal_fabric.png";
 		}
 
 
@@ -170,6 +170,20 @@
 					.endStroke();
 
 
+				//highlight
+				this.threadDisplay.graphics
+					.setStrokeStyle(.5,"round")
+					.beginStroke( tinycolor( this.thread.getColor() ).lighten(20).saturate(35).toHexString() );
+
+				this.threadDisplay.graphics
+					.moveTo(start.x,start.y)
+					.lineTo(end.x,end.y);
+					//.endStroke();
+
+				this.threadDisplay.graphics
+					.moveTo(start.x,start.y - 2)
+					.lineTo(end.x,end.y - 2)
+					.endStroke();
 
 			}
 		}
