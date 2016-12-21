@@ -19,8 +19,13 @@
 			this.accentThreadDisplay = new createjs.Shape();
 			this.accentThreadDisplay.compositeOperation = 'lighter';
 			this.accentThreadDisplay.alpha = 0.5;
+
+			this.accentThreadDisplay2 = new createjs.Shape();
+			this.accentThreadDisplay2.compositeOperation = 'lighter';
+			this.accentThreadDisplay2.alpha = 0.1;
+
 			this.pointsDisplay = new createjs.Shape();
-			this.addChild( this.threadDisplay, this.pointsDisplay, this.accentThreadDisplay );
+			this.addChild( this.threadDisplay, this.pointsDisplay, this.accentThreadDisplay, this.accentThreadDisplay2 );
 
 
 			this.on("added", this.added );
@@ -71,7 +76,7 @@
 			this.thread.addPoint( point.x,point.y );
 
 			//DISCO CODE
-			//this.thread.styleId = (this.thread.styleId + 1 ) % 4;
+			this.thread.styleId = (this.thread.styleId + 1 ) % 4;
 
 			this.updateThread();
 			this.animatePoints();
@@ -108,6 +113,9 @@
 
 			this.threadDisplay.graphics.clear();
 
+			this.accentThreadDisplay2.graphics.clear();
+			this.accentThreadDisplay2.graphics.setStrokeStyle(7, "round");
+			this.accentThreadDisplay2.graphics.beginBitmapStroke ( this.image , "repeat" ).drawRect(0,0,20,20);
 
 
 
@@ -122,9 +130,16 @@
 
 
 
+				this.accentThreadDisplay2.graphics
+					.moveTo(start.x,start.y)
+					.lineTo(end.x,end.y);
+
+
+
 				//SHADOW
 				this.threadDisplay.graphics
-					.setStrokeStyle(12,"round")
+					.setStrokeStyle(8,"round")
+					.setStrokeDash()
 					.beginStroke( "rgba(0,0,0,.1)" );
 
 				this.threadDisplay.graphics
@@ -135,7 +150,7 @@
 
 				//shade
 				this.threadDisplay.graphics
-					.setStrokeStyle(8,"round")
+					.setStrokeStyle(6,"round")
 					.beginStroke( tinycolor( this.thread.getColor() ).darken(10).toHexString() );
 
 				this.threadDisplay.graphics
@@ -146,7 +161,7 @@
 
 				//body
 				this.threadDisplay.graphics
-					.setStrokeStyle(5,"round")
+					.setStrokeStyle(4,"round")
 					.beginStroke(this.thread.getColor());
 
 				this.threadDisplay.graphics
@@ -156,8 +171,8 @@
 
 				//highlight
 				this.threadDisplay.graphics
-					.setStrokeStyle(1,"round")
-					.setStrokeDash([4,3],0)
+					.setStrokeStyle(.5,"round")
+					.setStrokeDash([4,3], i )
 					.beginStroke( tinycolor( this.thread.getColor() ).lighten(20).saturate(10).toHexString() );
 
 				this.threadDisplay.graphics
