@@ -140,7 +140,7 @@
 				this.threadDisplay.graphics
 					.setStrokeStyle(7,"round")
 					.setStrokeDash()
-					.beginStroke( "rgba(0,0,0,.1)" );
+					.beginStroke( tinycolor(this.thread.getColor()).darken(20).desaturate(50).setAlpha(.3).toRgbString() );
 
 				this.threadDisplay.graphics
 					.moveTo(start.x,start.y)
