@@ -119,41 +119,48 @@
 				var start = stitch.startPosition.getCenteredPosition();
 				var end = stitch.endPosition.getCenteredPosition();
 
-				this.threadTextureDisplay.graphics
-					.moveTo(start.x,start.y)
-					.lineTo(end.x,end.y);
+				// Draw French Knot or Thread
+				// if((start.x == end.x)&&(start.y == end.y))
+				// {
+				// 	console.log("french knot");
+				// }else{
+					// Texture
+					this.threadTextureDisplay.graphics
+						.moveTo(start.x,start.y)
+						.lineTo(end.x,end.y);
 
-				// Shadow 
-				this.threadDisplay.graphics
-					.setStrokeStyle(7,"round")
-					.setStrokeDash()
-					.beginStroke( tinycolor(this.thread.getColor()).darken(20).desaturate(50).setAlpha(.3).toRgbString() );
+					// Shadow 
+					this.threadDisplay.graphics
+						.setStrokeStyle(7,"round")
+						.setStrokeDash()
+						.beginStroke( tinycolor(this.thread.getColor()).darken(20).desaturate(50).setAlpha(.3).toRgbString() );
 
-				this.threadDisplay.graphics
-					.moveTo(start.x,start.y)
-					.lineTo(end.x,end.y)
+					this.threadDisplay.graphics
+						.moveTo(start.x,start.y)
+						.lineTo(end.x,end.y)
+						.endStroke();
+
+					// Body
+					this.threadDisplay.graphics
+						.setStrokeStyle(5,"round")
+						.beginStroke(this.thread.getColor());
+
+					this.threadDisplay.graphics
+						.moveTo(start.x,start.y)
+						.lineTo(end.x,end.y)
+						.endStroke();
+
+
+					// Highlight
+					this.threadDisplay.graphics
+						.setStrokeStyle(3,"round")
+						.beginStroke( tinycolor( this.thread.getColor() ).lighten(20).saturate(5).toHexString() );
+
+					this.threadDisplay.graphics
+						.moveTo(start.x,start.y)
+						.lineTo(end.x,end.y)
 					.endStroke();
-
-				// Body
-				this.threadDisplay.graphics
-					.setStrokeStyle(5,"round")
-					.beginStroke(this.thread.getColor());
-
-				this.threadDisplay.graphics
-					.moveTo(start.x,start.y)
-					.lineTo(end.x,end.y)
-					.endStroke();
-
-
-				// Highlight
-				this.threadDisplay.graphics
-					.setStrokeStyle(3,"round")
-					.beginStroke( tinycolor( this.thread.getColor() ).lighten(20).saturate(5).toHexString() );
-
-				this.threadDisplay.graphics
-					.moveTo(start.x,start.y)
-					.lineTo(end.x,end.y)
-					.endStroke();
+				// }
 			}
 		}
 

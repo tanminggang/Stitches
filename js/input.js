@@ -1,7 +1,7 @@
-function Input( virtualgrid, drawing, background, display )
+function Input( virtualgrid, displayContainer, background, display )
 {
 	this.virtualgrid = virtualgrid;
-	this.drawing = drawing;
+	this.displayContainer = displayContainer;
 	this.background = background;
 	this.display = display;
 
@@ -17,7 +17,7 @@ function Input( virtualgrid, drawing, background, display )
 Input.prototype.updateLastPosition = function()
 {
 	this.lastPosition.x = stage.mouseX;
-this.lastPosition.y = stage.mouseY;
+	this.lastPosition.y = stage.mouseY;
 }
 
 Input.prototype.mouseMove = function ( event )
@@ -28,8 +28,8 @@ Input.prototype.mouseMove = function ( event )
 	var position = new Point(stage.mouseX, stage.mouseY );
 	var deltaPosition = new Point( position.x - this.lastPosition.x, position.y - this.lastPosition.y);
 
-	this.drawing.x += deltaPosition.x;
-	this.drawing.y += deltaPosition.y;
+	this.displayContainer.x += deltaPosition.x;
+	this.displayContainer.y += deltaPosition.y;
 
 	this.background.updatePanDelta();
 
@@ -59,7 +59,7 @@ Input.prototype.keyDown = function ( event )
 			break;
 		case 13: 	// 'enter'
 			container.scaleX = container.scaleY = 1;
-			this.drawing.x = this.drawing.y = 0;
+			this.displayContainer.x = this.displayContainer.y = 0;
 			break;
 		default:
 			//console.log( event.keyCode);
@@ -95,6 +95,8 @@ Input.prototype.mouseWheel = function ( event )
 Input.prototype.save = function()
 {
 	var data = this.display.thread.getData();
+		data.panPosition = new Point( this.displayContainer.x, this.displayContainer.y );
+
 	var blob = new Blob([ JSON.stringify( data )], {type:"text/json"});
 	saveAs( blob, "stitch.json" );
 	//console.log( JSON.stringify( data ) )
@@ -103,8 +105,15 @@ Input.prototype.save = function()
 
 Input.prototype.load = function( data )
 {
-	this.display.thread.loadData( JSON.parse(data) );
+	var nativeData = JSON.parse(data);
+	this.display.thread.loadData( nativeData );
 	this.display.updateThread();
+	if(nativeData.panPosition)
+	{
+		console.log("hey");
+		this.displayContainer.x = nativeData.panPosition.x;
+		this.displayContainer.y = nativeData.panPosition.y;
+	}
 }
 
 Input.prototype.loadFile = function()
