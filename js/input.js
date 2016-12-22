@@ -50,9 +50,10 @@ Input.prototype.keyDown = function ( event )
 			this.updateLastPosition();
 			this.spacebarDown = true;
 			break;
-		case 67: 	// 'c'
-			this.display.clear();
-			break;
+		// DON'T LIKE THE KEY. KEEP HITTING THIS WHEN TRYING TO HIT SPACE, SHOULD REQUIRE A MODIFIER KEY
+		// case 67: 	// 'c'
+		// 	this.display.clear();
+		// 	break;
 		case 90: 	// 'z'
 			this.display.undo();
 			break;
