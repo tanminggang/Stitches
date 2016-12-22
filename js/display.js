@@ -22,6 +22,9 @@
 			this.pointTextureDisplay.compositeOperation = 'screen';
 			this.pointTextureDisplay.alpha = 0.3;
 
+			this.mouseEnabled = false;
+			this.mouseChildren = false;
+
 			this.addChild( this.threadDisplay, this.pointDisplay, this.pointTextureDisplay, this.threadTextureDisplay );
 
 			this.on("added", this.added );
@@ -169,23 +172,27 @@
 			this.pointDisplay.graphics.clear();
 			this.pointTextureDisplay.graphics.clear();
 
-			if(this.thread.points.length <=  0)
+			if(this.thread.points.length <  1)
 			return;
 
-			this.pointDisplay.graphics.moveTo( this.thread.points[0].x, this.thread.points[0].y);
-			this.pointTextureDisplay.graphics.moveTo( this.thread.points[0].x, this.thread.points[0].y);
+			//var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
+			var points = this.thread.points;
+				//points.push( new Point(pt.x,pt.y) );
+
+			this.pointDisplay.graphics.moveTo( points[0].x, points[0].y);
+			this.pointTextureDisplay.graphics.moveTo( points[0].x, points[0].y);
 
 			// Shadow
 			var midpoints = [];
-			var lastPoint = this.thread.points[0];
+			var lastPoint = points[0];
 			var lastMidPoint = lastPoint;
 
 			this.pointDisplay.graphics.setStrokeStyle(7, "round");
 			this.pointDisplay.graphics.beginStroke( tinycolor(this.thread.getColor()).darken(20).desaturate(50).setAlpha(.3).toRgbString() );	
 
-			for( var i = 1; i < this.thread.points.length; i++)
+			for( var i = 1; i < points.length; i++)
 			{
-				var point = this.thread.points[i];
+				var point = points[i];
 				var midPoint = point.add( lastPoint ).scale( .5 );
 
 				this.pointDisplay.graphics.moveTo( midPoint.x, midPoint.y )
@@ -199,15 +206,15 @@
 
 
 			// Fill
-			lastPoint = this.thread.points[0];
+			lastPoint = points[0];
 			lastMidPoint = lastPoint;
 
 			this.pointDisplay.graphics.setStrokeStyle(5, "round");
 			this.pointDisplay.graphics.beginStroke(this.thread.getColor());
 
-			for( var i = 1; i < this.thread.points.length; i++)
+			for( var i = 1; i < points.length; i++)
 			{
-				var point = this.thread.points[i];
+				var point = points[i];
 				var midPoint = midpoints[i];
 
 				this.pointDisplay.graphics.moveTo( midPoint.x, midPoint.y )
@@ -218,15 +225,15 @@
 			}
 
 			// Highlight
-			lastPoint = this.thread.points[0];
+			lastPoint = points[0];
 			lastMidPoint = lastPoint;
 
 			this.pointDisplay.graphics.setStrokeStyle(3, "round");
 			this.pointDisplay.graphics.beginStroke(tinycolor( this.thread.getColor() ).lighten(20).saturate(5).toHexString() );
 
-			for( var i = 1; i < this.thread.points.length; i++)
+			for( var i = 1; i < points.length; i++)
 			{
-				var point = this.thread.points[i];
+				var point = points[i];
 				var midPoint = midpoints[i];
 
 				this.pointDisplay.graphics.moveTo( midPoint.x, midPoint.y )
@@ -236,15 +243,15 @@
 				lastPoint = point;
 			}
 			// Texture
-			lastPoint = this.thread.points[0];
+			lastPoint = points[0];
 			lastMidPoint = lastPoint;
 			
 			this.pointTextureDisplay.graphics.setStrokeStyle(5, "round");
 			this.pointTextureDisplay.graphics.beginBitmapStroke ( applicationData.getResult("thread") , "repeat" );		
 
-			for( var i = 1; i < this.thread.points.length; i++)
+			for( var i = 1; i < points.length; i++)
 			{
-				var point = this.thread.points[i];
+				var point = points[i];
 				var midPoint = midpoints[i];
 
 				this.pointTextureDisplay.graphics.moveTo( midPoint.x, midPoint.y )
@@ -253,7 +260,6 @@
 				lastMidPoint = midPoint;
 				lastPoint = point;
 			}
-
 		}
 
 		p.animatePoints = function()
