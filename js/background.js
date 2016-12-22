@@ -5,9 +5,10 @@
 		this.Container_constructor();
 		this.virtualGrid = virtualGrid;
 
-
 		this.backgroundStyle = document.getElementsByTagName("body")[0].style;
-		this.bitmap = new createjs.Bitmap("imgs/aida.png");
+		this.bitmap = new createjs.Bitmap( applicationData.getResult("background") );
+		//console.log( this.bitmap );
+		//return;
 		this.setup();
 	}
 

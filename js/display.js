@@ -27,8 +27,8 @@
 			this.on("added", this.added );
 
 			// TESTING
-			this.image = new Image();
-        	this.image.src = "imgs/cheap_diagonal_fabric.png";
+			//this.image = new Image();
+        	//this.image.src = "imgs/cheap_diagonal_fabric.png";
 		}
 
 
@@ -108,7 +108,7 @@
 
 			this.threadTextureDisplay.graphics.clear();
 			this.threadTextureDisplay.graphics.setStrokeStyle(5, "round");
-			this.threadTextureDisplay.graphics.beginBitmapStroke ( this.image , "repeat" );
+			this.threadTextureDisplay.graphics.beginBitmapStroke ( applicationData.getResult("thread") , "repeat" );
 
 			var offset = (this.thread.points.length > 0) ? (1) : (0);
 			var stitches = this.thread.stitches;
@@ -240,7 +240,7 @@
 			lastMidPoint = lastPoint;
 			
 			this.pointTextureDisplay.graphics.setStrokeStyle(5, "round");
-			this.pointTextureDisplay.graphics.beginBitmapStroke ( this.image , "repeat" );		
+			this.pointTextureDisplay.graphics.beginBitmapStroke ( applicationData.getResult("thread") , "repeat" );		
 
 			for( var i = 1; i < this.thread.points.length; i++)
 			{
