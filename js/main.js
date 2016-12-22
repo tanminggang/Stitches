@@ -46,7 +46,7 @@ function applicationReady( event )
 	var virtualgrid = new VirtualGrid( spacing );
 
 	// Display
-	var queue = new Queue( virtualgrid );
+	var piece = new Piece( virtualgrid );
 	var display = new Display( virtualgrid );
 	var background = new Background( virtualgrid );
 	var cursor = new Cursor( virtualgrid );
@@ -67,9 +67,9 @@ function applicationReady( event )
 /*
 
 	TODO
+	- need to CRUD Threads ( just start with a fucking array)
 	- fix thread going to final pointer position
 	- more visible cursor
-	- need to CRUD Threads
 	- need delete
 	- need seperate lines
 	- add ability to add knots at a point or ignore the same end + start point when creating threads

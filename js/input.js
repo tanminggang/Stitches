@@ -70,7 +70,11 @@ Input.prototype.keyDown = function ( event )
 		var id = event.keyCode - 48;
 
 		if(id < threadStyle.length)
+		{
 			threadId = id;
+			console.log("Change Thread:"+id);
+			this.display.changeThread();
+		}
 	}
 }
 

@@ -75,7 +75,7 @@
 			this.thread.addPoint( point.x,point.y );
 
 			//DISCO CODE
-			this.thread.styleId = (this.thread.styleId + 1 ) % 4;
+			//this.thread.styleId = (this.thread.styleId + 1 ) % 4;
 
 			this.updateThread();
 			this.animatePoints();
@@ -288,6 +288,17 @@
 			this.thread.clearPoints();
 			this.thread.undoStitch();
 			this.updateThread();
+		}
+
+		p.changeThread = function()
+		{
+			if( this.isPressing )
+				return;
+
+			this.thread.styleId = threadId;
+						
+			this.updateThread();
+			this.updatePoints();
 		}
 
 	window.Display = createjs.promote( Display, "Container" );
