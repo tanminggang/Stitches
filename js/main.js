@@ -293,6 +293,7 @@ function applicationReady( event )
 /*
 
 	TODO
+	- add vignette to create mood
 	- help screen
 	- welcome screen
 	- need to rearchitect because of display bugs
