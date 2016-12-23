@@ -7,11 +7,28 @@ function Input( virtualgrid, displayContainer, background, display )
 
 	this.spacebarDown = false;
 	this.lastPosition = new Point();
+
+	// Menus
+	this.createColorNav();
+
 	// Listeners
 	window.addEventListener("keydown", this.keyDown.bind(this), false );
 	window.addEventListener("keyup", this.keyUp.bind(this), false );
 	canvas.addEventListener("wheel", this.mouseWheel.bind(this), false );
 	stage.addEventListener("stagemousemove", this.mouseMove.bind(this), false );
+}
+
+Input.prototype.createColorNav = function()
+{
+	// Create Interface    <li><a href="#" class="selected">color 1</a></li>
+	for(var i = 0; i < threadStyle.length; i++)
+	{
+		var color = threadStyle[i];
+		var element = $('<li><a href="#" style="background-color:' + color +'">&nbsp;</a></li>');
+		if(i == 0)
+			element.find("a").attr("class","selected");
+		$( "nav#colors ul" ).append( element );
+	}
 }
 
 Input.prototype.updateLastPosition = function()
