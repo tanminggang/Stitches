@@ -293,7 +293,7 @@ function applicationReady( event )
 /*
 
 	TODO
-
+	- clear out old pieces
 	- need to rearchitect because of display bugs
 		( add display objects for each thread, need to cache unactive threads )
 		( add maximum number of stitches per thread to allow better caching )
