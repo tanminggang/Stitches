@@ -26,7 +26,7 @@ Input.prototype.createHelpNav = function()
 	var self = this;
 	var helpBtn = $('#top a');
 		helpBtn.click( function(){
-			console.log("help btn pressed");
+			self.resetZoom();
 			self.display.visible = (self.display.visible)?(false):(true);
 			$('#center a').fadeToggle();//slideToggle();		
 		});
@@ -96,10 +96,12 @@ Input.prototype.keyDown = function ( event )
 			{
 				this.display.clear();
 				this.resetView();
+				this.resetZoom();
 			}
 			break;
 		case 13: 	// 'enter'
 			this.resetView();
+			this.resetZoom();
 			break;
 		case 90: 	// 'z'
 			this.display.undo();
@@ -123,8 +125,12 @@ Input.prototype.keyDown = function ( event )
 
 Input.prototype.resetView = function()
 {
-	container.scaleX = container.scaleY = 1;
 	this.displayContainer.x = this.displayContainer.y = 0;	
+}
+
+Input.prototype.resetZoom = function()
+{
+	container.scaleX = container.scaleY = 1;
 }
 
 Input.prototype.changeThread = function( id )
