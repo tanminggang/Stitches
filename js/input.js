@@ -10,12 +10,27 @@ function Input( virtualgrid, displayContainer, background, display )
 
 	// Menus
 	this.createColorNav();
+	this.createHelpNav();
 
 	// Listeners
 	window.addEventListener("keydown", this.keyDown.bind(this), false );
 	window.addEventListener("keyup", this.keyUp.bind(this), false );
 	canvas.addEventListener("wheel", this.mouseWheel.bind(this), false );
 	stage.addEventListener("stagemousemove", this.mouseMove.bind(this), false );
+}
+
+Input.prototype.createHelpNav = function()
+{
+	//$('#center a').hide();
+
+	var self = this;
+	var helpBtn = $('#top a');
+		helpBtn.click( function(){
+			console.log("help btn pressed");
+			self.display.visible = (self.display.visible)?(false):(true);
+			$('#center a').fadeToggle();//slideToggle();		
+		});
+
 }
 
 Input.prototype.createColorNav = function()
