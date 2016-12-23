@@ -78,7 +78,11 @@ Input.prototype.keyDown = function ( event )
 		case 67: 	// 'c'
 			var shouldClear = confirm("Clear Stiches?");
 			if(shouldClear)
+			{
 				this.display.clear();
+				this.resetView();
+			}
+			break;
 		case 13: 	// 'enter'
 			this.resetView();
 			break;
