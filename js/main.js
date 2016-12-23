@@ -68,6 +68,7 @@ function applicationReady( event )
 
 	TODO
 	- need to rearchitect because of display bugs
+		( add display objects for each thread, need to cache unactive threads )
 	- look at CRUD display Architecture
 	- fix thread going to final pointer position
 	- more visible cursor
