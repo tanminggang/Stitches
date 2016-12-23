@@ -67,7 +67,7 @@ function applicationReady( event )
 /*
 
 	TODO
-	- need to CRUD Threads ( just start with a fucking array)
+	- look at CRUD display Architecture
 	- fix thread going to final pointer position
 	- more visible cursor
 	- need delete

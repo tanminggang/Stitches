@@ -324,8 +324,16 @@
 
 		p.undo = function()
 		{
-			this.thread.clearPoints();
-			this.thread.undoStitch();
+			if( this.isPressing )
+				return;
+
+			var thread = this.currentThread();
+				thread.clearPoints();
+				thread.undoStitch();
+
+			if(thread.stitches.length <= 0)
+				this.threads.pop();
+
 			this.updateThread();
 		}
 
