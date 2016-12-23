@@ -292,8 +292,6 @@ function applicationReady( event )
 /*
 
 	TODO
-	- add additional colors
-	- tweak colors
 	- help screen
 	- welcome screen
 	- need to rearchitect because of display bugs
