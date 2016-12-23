@@ -14,7 +14,7 @@ var threadStyle =
 	"#ce0a38"
      
 ];
-var threadId = 1;
+var threadId = 0;
 var applicationData;
 
 function main()

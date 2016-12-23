@@ -21,10 +21,16 @@ function Input( virtualgrid, displayContainer, background, display )
 Input.prototype.createColorNav = function()
 {
 	// Create Interface    <li><a href="#" class="selected">color 1</a></li>
+	var self = this;
 	for(var i = 0; i < threadStyle.length; i++)
 	{
+		var keyId = i +1;
 		var color = threadStyle[i];
-		var element = $('<li><a href="#" style="background-color:' + color +'">&nbsp;</a></li>');
+		var element = $('<li><a href="#" style="background-color:' + color +'">'+keyId+'</a></li>');
+			element.data("styleId", i );
+			element.click( function(){
+				self.changeThread( $(this).data("styleId") );
+			});
 		if(i == 0)
 			element.find("a").attr("class","selected");
 		$( "nav#colors ul" ).append( element );
@@ -84,14 +90,23 @@ Input.prototype.keyDown = function ( event )
 
 	if(event.keyCode >= 49 && event.keyCode <= 57 )
 	{
-		var id = event.keyCode - 48;
+		var id = event.keyCode - 49;
 
-		if(id < threadStyle.length)
-		{
-			threadId = id;
-			this.display.changeThread();
-		}
+		this.changeThread( id );
 	}
+}
+
+Input.prototype.changeThread = function( id )
+{
+	if(id < threadStyle.length)
+	{
+		threadId = id;
+		this.display.changeThread();
+		$("nav#colors ul li a").removeClass("selected").eq(id).addClass("selected");
+		return true;
+	}
+
+	return false;
 }
 
 Input.prototype.keyUp = function ( event )

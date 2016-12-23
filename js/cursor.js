@@ -24,7 +24,7 @@
 			beginFill( colors.foreground ).
 			drawCircle(0,0,this.virtualGrid.spacing * 0.5);
 
-		this.addChild( this.display, this.cursor );
+		this.addChild( this.display );
 
 		this.on("added", this.added );
 	}

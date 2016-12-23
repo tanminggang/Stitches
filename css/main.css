@@ -6,9 +6,12 @@ html, body, div, ul, li, button, h1, p
 
 body
 {
-	cursor: none;
     overflow: hidden;
+}
 
+#canvas
+{
+	cursor: crosshair;
 }
 
 .menu#top
@@ -37,7 +40,7 @@ nav
 {
 	display: table;
     table-layout: fixed;
-    width: 100%;	
+    width: 100%;
 }
 
 nav ul
@@ -55,24 +58,21 @@ nav ul li {
 
 nav ul li a
 {
-	color: #FFF;
 	display: block;
+	color: #00000000;
 }
 
 nav ul li a:hover
 {
-	background: rgba(255,255,255,.3);
-}
 
+}
 
 nav ul li a.selected
 {
-	background: #FFF;
-	color: #292A25;
-}
 
+}
 
 nav ul li a.selected:hover
 {
-	background: rgba(255,255,255,.3);
+
 }
