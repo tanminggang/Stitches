@@ -114,7 +114,7 @@ Thread.prototype.getData = function()
 Thread.prototype.loadData = function( data )
 {
 	this.clearAll();
-	this.styleId = data.styleId;
+	this.setColor( data.styleId );
 	for(var i = 0; i < data.stitchData.length; i++)
 	{
 		var stitch = new Stitch( this.virtualgrid ); 

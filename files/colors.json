@@ -1,0 +1,98 @@
+{
+  "panPosition": {
+    "x": 0,
+    "y": 0
+  },
+  "threads": [
+    {
+      "styleId": 0,
+      "stitchData": [
+        {
+          "startGridPosition": {
+            "x": -21,
+            "y": -30
+          },
+          "endGridPosition": {
+            "x": -19,
+            "y": 12
+          }
+        }
+      ]
+    },
+    {
+      "styleId": 1,
+      "stitchData": [
+        {
+          "startGridPosition": {
+            "x": -16,
+            "y": -32
+          },
+          "endGridPosition": {
+            "x": -12,
+            "y": 14
+          }
+        }
+      ]
+    },
+    {
+      "styleId": 2,
+      "stitchData": [
+        {
+          "startGridPosition": {
+            "x": -10,
+            "y": -31
+          },
+          "endGridPosition": {
+            "x": -5,
+            "y": 11
+          }
+        }
+      ]
+    },
+    {
+      "styleId": 3,
+      "stitchData": [
+        {
+          "startGridPosition": {
+            "x": -3,
+            "y": -29
+          },
+          "endGridPosition": {
+            "x": 4,
+            "y": 11
+          }
+        }
+      ]
+    },
+    {
+      "styleId": 4,
+      "stitchData": [
+        {
+          "startGridPosition": {
+            "x": 9,
+            "y": -24
+          },
+          "endGridPosition": {
+            "x": 15,
+            "y": 16
+          }
+        }
+      ]
+    },
+    {
+      "styleId": 5,
+      "stitchData": [
+        {
+          "startGridPosition": {
+            "x": 17,
+            "y": -22
+          },
+          "endGridPosition": {
+            "x": 23,
+            "y": 18
+          }
+        }
+      ]
+    }
+  ]
+}
