@@ -51,37 +51,48 @@ nav ul li {
     list-style: none;
     display: table-cell;
     text-align: center;
-    height: 60px;
+    height: 60px;/*
+    padding-left:3px;
+    padding-right:3px;*/
 }
 
 nav ul li a
 {
 	display: block;
 	color: #00000000;
-	height: 30px;
+	height: 15px;
 	background-image: url("../imgs/groovepaper.png");
+	opacity: 0.3;
 	/*box-sizing:border-box;*/
 	/*transition: border .5s;*/
+	/*border-style: solid;*/
+	/*border-radius: 50px 50px 50px 50px;*/
+/*	border-right: none;
+	border-left: none;*/
+	transition: opacity .4s;
 }
 
 nav ul li:first-child a
 {
-	border-radius: 50px 0px 0px 50px;	
+	border-radius: 50px 0px 0px 50px;
+	/*border-left: solid;	*/
 }
 
 nav ul li:last-child a
 {
 	border-radius: 0px 50px 50px 0px;
+	/*border-right: solid;	*/
 }
 
 nav ul li a:hover
 {
-	
+	/*border-style: solid;*/
+	opacity: 0.9;
 }
 
 nav ul li a.selected
 {
-	background-color: #FFFFFF;
+	opacity: 1;
 }
 
 nav ul li a.selected:hover
