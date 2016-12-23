@@ -235,7 +235,6 @@ var threadStyle =
 	"#65A8A6",
 	"#8EBE94",
 	"#bef38a",
-	"#DDDDDD",
 	"#DDDDDD"
 ];
 

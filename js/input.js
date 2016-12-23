@@ -94,9 +94,11 @@ Input.prototype.keyDown = function ( event )
 			//console.log( event.keyCode);
 	}
 
-	if(event.keyCode >= 49 && event.keyCode <= 57 )
+	if(event.keyCode >= 48 && event.keyCode <= 57 )
 	{
 		var id = event.keyCode - 49;
+		if(event.keyCode == 48)
+			id = threadStyle.length - 1;
 
 		this.changeThread( id );
 	}
