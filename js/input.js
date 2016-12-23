@@ -175,6 +175,7 @@ Input.prototype.load = function( data )
 {
 	var nativeData = JSON.parse(data);
 
+
 	this.display.threads = [];
 
 	for(var i = 0; i < nativeData.threads.length; i++)
@@ -193,6 +194,8 @@ Input.prototype.load = function( data )
 	}
 
 	this.background.resize();
+	//this.resetView();
+
 	this.changeThread( 0 );
 }
 

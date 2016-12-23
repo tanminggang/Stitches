@@ -45,11 +45,12 @@
 				matrix.scale(.1, .1);
 				matrix.translate(-50,50);
 
-			var padding = 50;
+			var maxPadding = (canvas.width > canvas.height) ? (canvas.width) : (canvas.height);
+			var padding = maxPadding;
 
 			this.pattern.graphics.clear();
 			this.pattern.graphics.beginBitmapFill(this.bitmap.image, "repeat", matrix)
-				.drawRect(-padding, -padding, canvas.width + 2*padding, canvas.height + 2*padding)
+				.drawRect(-padding, -padding, canvas.width + 2* padding, canvas.height + 2* padding)
 				.endFill();
 		}
 

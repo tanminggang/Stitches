@@ -1,4 +1,10 @@
 {
+    "panPosition": {
+    "x": 0,
+    "y": 0
+  },
+    "threads": [
+    {
   "styleId": 1,
   "stitchData": [
     {
@@ -1899,7 +1905,9 @@
       "endGridPosition": {
         "x": 45,
         "y": 30
-      }
+          }
+        }
+      ]
     }
   ]
 }
