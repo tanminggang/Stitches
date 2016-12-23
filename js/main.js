@@ -293,19 +293,14 @@ function applicationReady( event )
 /*
 
 	TODO
-	- add vignette to create mood
-	- help screen
-	- welcome screen
+	
 	- need to rearchitect because of display bugs
 		( add display objects for each thread, need to cache unactive threads )
 		( add maximum number of stitches per thread to allow better caching )
-	- look at CRUD display Architecture
-	- seems to still be some color issues that need to be fixed
 	- allow thread colors to be changed when changing colors above threads
 	- need delete
 	- add ability to add knots at a point or ignore the same end + start point when creating threads
 	- show backing threads
-	- design initial dealyo
-	- could do active cacheing to make it run better
+	- add vignette to create mood
 
 */
