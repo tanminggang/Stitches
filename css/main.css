@@ -10,7 +10,69 @@ body
     overflow: hidden;
 
 }
-crap
-{
 
+.menu#top
+{
+	top: 0px;
+}
+
+.menu#bottom
+{
+	bottom: -4px;
+	transition: bottom .2s;
+}
+
+.menu
+{
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	background: #292A25;
+	color: #FFF;
+	z-index: 10;
+	text-transform: uppercase;
+}
+
+nav
+{
+	display: table;
+    table-layout: fixed;
+    width: 100%;	
+}
+
+nav ul
+{
+	display: table-row;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    list-style: none;
+    display: table-cell;
+    text-align: center;
+}
+
+nav ul li a
+{
+	color: #FFF;
+	display: block;
+}
+
+nav ul li a:hover
+{
+	background: rgba(255,255,255,.3);
+}
+
+
+nav ul li a.selected
+{
+	background: #FFF;
+	color: #292A25;
+}
+
+
+nav ul li a.selected:hover
+{
+	background: rgba(255,255,255,.3);
 }
