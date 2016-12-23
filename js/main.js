@@ -293,7 +293,7 @@ function applicationReady( event )
 /*
 
 	TODO
-	
+
 	- need to rearchitect because of display bugs
 		( add display objects for each thread, need to cache unactive threads )
 		( add maximum number of stitches per thread to allow better caching )
@@ -302,5 +302,7 @@ function applicationReady( event )
 	- add ability to add knots at a point or ignore the same end + start point when creating threads
 	- show backing threads
 	- add vignette to create mood
+	- mobile zoom
+	- mobile interface tweaks
 
 */
