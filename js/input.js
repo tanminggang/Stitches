@@ -80,14 +80,13 @@ Input.prototype.keyDown = function ( event )
 			console.log(shouldClear);
 			if(shouldClear)
 				this.display.clear();
-			break;
-		case 90: 	// 'z'
-			this.display.undo();
-			break;
 		case 13: 	// 'enter'
 			container.scaleX = container.scaleY = 1;
 			this.displayContainer.x = this.displayContainer.y = 0;
 			break;
+		case 90: 	// 'z'
+			this.display.undo();
+			break;			
 		default:
 			//console.log( event.keyCode);
 	}
