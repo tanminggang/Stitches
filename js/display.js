@@ -121,6 +121,8 @@
 		p.updateThread = function()
 		{
 			this.threadDisplay.graphics.clear();
+			this.threadTextureDisplay.graphics.clear();
+
 			for(var i = 0; i < this.threads.length; i++)
 			{
 				this.drawThread( i );
@@ -133,7 +135,6 @@
 			if((thread == null) || (thread.length < 0))
 				return;
 
-			this.threadTextureDisplay.graphics.clear();
 			this.threadTextureDisplay.graphics.setStrokeStyle(5, "round");
 			this.threadTextureDisplay.graphics.beginBitmapStroke ( applicationData.getResult("thread") , "repeat" );
 
@@ -154,7 +155,7 @@
 					// Texture
 					this.threadTextureDisplay.graphics
 						.moveTo(start.x,start.y)
-						.lineTo(end.x,end.y);
+						.lineTo(end.x,end.y)
 
 					// Shadow 
 					this.threadDisplay.graphics
@@ -188,7 +189,8 @@
 						.lineTo(end.x,end.y)
 					.endStroke();
 				// }
-			}			
+			}
+			this.threadTextureDisplay.graphics.endStroke();			
 		}
 
 		p.updatePoints = function( id )
@@ -353,6 +355,9 @@
 
 			if((thread == null) || (this.threads.length <= 0) || (thread.stitches.length > 0))
 			{
+				if(thread.points.length > 0)
+					thread.points = [];
+
 				var thread = new Thread( this.virtualgrid, threadId );
 				this.threads.push( thread );
 			}else{

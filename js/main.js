@@ -67,6 +67,7 @@ function applicationReady( event )
 /*
 
 	TODO
+	- need to rearchitect because of display bugs
 	- look at CRUD display Architecture
 	- fix thread going to final pointer position
 	- more visible cursor
