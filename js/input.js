@@ -77,12 +77,10 @@ Input.prototype.keyDown = function ( event )
 		// DON'T LIKE THE KEY. KEEP HITTING THIS WHEN TRYING TO HIT SPACE, SHOULD REQUIRE A MODIFIER KEY
 		case 67: 	// 'c'
 			var shouldClear = confirm("Clear Stiches?");
-			console.log(shouldClear);
 			if(shouldClear)
 				this.display.clear();
 		case 13: 	// 'enter'
-			container.scaleX = container.scaleY = 1;
-			this.displayContainer.x = this.displayContainer.y = 0;
+			this.resetView();
 			break;
 		case 90: 	// 'z'
 			this.display.undo();
@@ -102,6 +100,12 @@ Input.prototype.keyDown = function ( event )
 
 		this.changeThread( id );
 	}
+}
+
+Input.prototype.resetView = function()
+{
+	container.scaleX = container.scaleY = 1;
+	this.displayContainer.x = this.displayContainer.y = 0;	
 }
 
 Input.prototype.changeThread = function( id )
@@ -187,6 +191,9 @@ Input.prototype.load = function( data )
 		this.displayContainer.x = nativeData.panPosition.x;
 		this.displayContainer.y = nativeData.panPosition.y;
 	}
+
+	this.background.resize();
+	this.changeThread( 0 );
 }
 
 Input.prototype.loadFile = function()

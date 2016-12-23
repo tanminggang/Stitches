@@ -224,10 +224,12 @@ var spacing = 10;
 // 	"#82b461"
 // ];
 
+// seafoam green, 	"#74e1b4"
+
 // Final
 var threadStyle =
 [
-	"#282828",
+	"#1e1e1e",
 	"#61544c",
 	"#ff0054",
 	"#4E395D",
@@ -291,6 +293,8 @@ function applicationReady( event )
 /*
 
 	TODO
+	- BUG, when loading color needs to be reset
+	- BUG, background is out fo range when loading somethign that has been moved
 	- help screen
 	- welcome screen
 	- need to rearchitect because of display bugs
