@@ -15,15 +15,49 @@ var colors = {
 // 	"#29cecc"
 // ];
 
+// // Pastel
+// var threadStyle =
+// [
+// 	"#EA3556",
+// 	"#61D2D6",
+// 	"#EDE5E2",
+// 	"#ED146F",
+// 	"#EDDE45",
+// 	"#9BF0E9"
+// ];
+
+// // Which Way
+// var threadStyle =
+// [
+// 	"#29221f",
+// 	"#f83350",
+// 	"#1c747b",
+// 	"#27bfbb",
+// 	"#fcf5c8"
+// ];
+
+// // Pink Pastel
+// var threadStyle =
+// [
+// 	"#FE4365",
+// 	"#FC9D9A",
+// 	"#F9CDAD",
+// 	"#C8C8A9",
+// 	"#83AF9B",
+// 	"#1c747b"
+// ];
+
+// Country Home
 var threadStyle =
 [
-	"#EA3556",
-	"#61D2D6",
-	"#EDE5E2",
-	"#ED146F",
-	"#EDDE45",
-	"#9BF0E9"
+	"#5f7180",
+	"#8f9d93",
+	"#ce6179",
+	"#4b4c53",
+	"#d7ad99",
+	"#d5d5d3"
 ];
+
 var threadId = 0;
 var applicationData;
 

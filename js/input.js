@@ -27,7 +27,7 @@ Input.prototype.createColorNav = function()
 		var keyId = i +1;
 		var color = threadStyle[i];
 		var thread = new Thread(null, i);
-		var element = $('<li><a href="#" style="background-color:'+ thread.getHighlightColor() +'; border-color:' + thread.getColor() +'">'+keyId+'</a></li>');
+		var element = $('<li><a href="#" style="background-color:'+ thread.getColor() +'; border-color:' + thread.getColor() +'">'+keyId+'</a></li>');
 			element.data("styleId", i );
 			element.click( function(){
 				self.changeThread( $(this).data("styleId") );

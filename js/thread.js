@@ -13,8 +13,12 @@ Thread.prototype.setColor = function( styleId )
 {
 	var styleColor = threadStyle[styleId];
 	
-	this.highlightColor = styleColor;
-	this.color = tinycolor(styleColor).darken(20).desaturate(5).toHexString();
+	// this.highlightColor = styleColor;
+	// this.color = tinycolor(styleColor).darken(20).desaturate(5).toHexString();
+	// this.shadowColor = tinycolor(styleColor).darken(20).desaturate(50).setAlpha(.3).toRgbString();
+
+	this.highlightColor = tinycolor(styleColor).lighten(20).saturate(5).toHexString();
+	this.color = styleColor;
 	this.shadowColor = tinycolor(styleColor).darken(20).desaturate(50).setAlpha(.3).toRgbString();
 
 	this.styleId = styleId;
