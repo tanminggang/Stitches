@@ -67,7 +67,7 @@ nav ul li a
 	/*border-radius: 50px 50px 50px 50px;*/
 /*	border-right: none;
 	border-left: none;*/
-	transition: opacity .4s;
+	transition: opacity .7s;
 }
 
 nav ul li:first-child a
@@ -85,11 +85,13 @@ nav ul li:last-child a
 nav ul li a:hover
 {
 	/*border-style: solid;*/
+	transition: opacity .1s;
 	opacity: 0.9;
 }
 
 nav ul li a.selected
 {
+	transition: opacity .1s;
 	opacity: 1;
 }
 

@@ -187,18 +187,19 @@ var spacing = 10;
 // 	"#61544c"
 // ];
 
-// Final
-var threadStyle =
-[
-	"#282828",
-	"#e63359",
-	"#4E395D",
-	"#827085",
-	"#65A8A6",
-	"#8EBE94",
-	"#CCFC8E",
-	"#61544c"
-];
+// // Final, TRY ONE
+// var threadStyle =
+// [
+// 	"#282828",
+// 	"#61544c",
+// 	"#e63359",
+// 	"#4E395D",
+// 	"#827085",
+// 	"#65A8A6",
+// 	"#8EBE94",
+// 	"#CCFC8E",
+// 	"#DDDDDD"
+// ];
 
 // // Rainblow
 // var threadStyle =
@@ -222,6 +223,20 @@ var threadStyle =
 // 	"#d51846",
 // 	"#82b461"
 // ];
+
+// Final
+var threadStyle =
+[
+	"#282828",
+	"#61544c",
+	"#cd3b65",
+	"#4E395D",
+	"#827085",
+	"#65A8A6",
+	"#8EBE94",
+	"#bef38a",
+	"#DDDDDD"
+];
 
 var threadId = 0;
 var applicationData;
