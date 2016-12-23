@@ -72,7 +72,6 @@ Input.prototype.keyDown = function ( event )
 		if(id < threadStyle.length)
 		{
 			threadId = id;
-			console.log("Change Thread:"+id);
 			this.display.changeThread();
 		}
 	}
@@ -98,9 +97,16 @@ Input.prototype.mouseWheel = function ( event )
 
 Input.prototype.save = function()
 {
-	var data = this.display.thread.getData();
+	var threads = this.display.threads;
+	var data = {};
 		data.panPosition = new Point( this.displayContainer.x, this.displayContainer.y );
+		data.threads = [];
 
+	for(var i = 0; i < this.display.threads.length; i++)
+	{
+		data.threads[i] = this.display.threads[i].getData();
+	}
+	
 	var blob = new Blob([ JSON.stringify( data )], {type:"text/json"});
 	saveAs( blob, "stitch.json" );
 	//console.log( JSON.stringify( data ) )
@@ -110,11 +116,20 @@ Input.prototype.save = function()
 Input.prototype.load = function( data )
 {
 	var nativeData = JSON.parse(data);
-	this.display.thread.loadData( nativeData );
+
+	this.display.threads = [];
+
+	for(var i = 0; i < nativeData.threads.length; i++)
+	{
+		var threadData = nativeData.threads[i];
+		var thread = this.display.createThread();
+			thread.loadData( threadData );
+	}
+
 	this.display.updateThread();
+
 	if(nativeData.panPosition)
 	{
-		console.log("hey");
 		this.displayContainer.x = nativeData.panPosition.x;
 		this.displayContainer.y = nativeData.panPosition.y;
 	}

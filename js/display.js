@@ -4,6 +4,7 @@
 	{
 		this.Container_constructor();
 		this.virtualgrid = virtualgrid;
+		this.threads = [];
 		this.setup();
 	}
 
@@ -11,7 +12,8 @@
 
 		p.setup = function()
 		{
-			this.thread = new Thread( this.virtualgrid, 1);
+			this.createThread();
+
 			this.threadDisplay = new createjs.Shape();
 			this.threadTextureDisplay = new createjs.Shape();
 			this.threadTextureDisplay.compositeOperation = 'screen';
@@ -50,43 +52,54 @@
 
 		p.pressDown = function( event )
 		{
+			var thread = this.currentThread();
+			if(thread == null)
+				thread = this.createThread();
+
 			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
-			var stitch = this.thread.startStitch( pt.x, pt.y);
+			var stitch = thread.startStitch( pt.x, pt.y);
 			var point = stitch.startPosition.getCenteredPosition();
 
 			this.lastPoint = pt;
-			this.thread.clearPoints();
+			thread.clearPoints();
 
 			this.updateThread();
 
 
-			this.thread.addPoint( point.x,point.y );
-			this.thread.addPoint( point.x,point.y );
+			thread.addPoint( point.x,point.y );
+			thread.addPoint( point.x,point.y );
 
 			this.isPressing = true;
 		}
 
 		p.pressUp = function( event )
 		{
+			var thread = this.currentThread();
+			if(thread == null)
+				return;
+
 			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
-			var stitch = this.thread.endStitch( pt.x, pt.y);
+			var stitch = thread.endStitch( pt.x, pt.y);
 			var point = stitch.endPosition.getCenteredPosition();
 
-			this.thread.addPoint( point.x,point.y );
+			thread.addPoint( point.x,point.y );
 
 			//DISCO CODE
 			//this.thread.styleId = (this.thread.styleId + 1 ) % 4;
 
 			this.updateThread();
-			this.animatePoints();
+			this.animatePoints( thread );
 
 			this.isPressing = false;
 		}
 
 		p.pressMove = function( event )
 		{
-
 			if( !this.isPressing )
+				return;
+
+			var thread = this.currentThread();
+			if(thread == null)
 				return;
 
 			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
@@ -96,10 +109,10 @@
 
 			if( sqrDistance > 200 )
 			{
-				this.thread.addPoint( pt.x,pt.y );
+				thread.addPoint( pt.x,pt.y );
 				this.lastPoint = pt;
 			} else {
-				var point = this.thread.points[ this.thread.points.length - 1 ];
+				var point = thread.points[ thread.points.length - 1 ];
 					point.x = pt.x;
 					point.y = pt.y;
 			}
@@ -108,13 +121,24 @@
 		p.updateThread = function()
 		{
 			this.threadDisplay.graphics.clear();
+			for(var i = 0; i < this.threads.length; i++)
+			{
+				this.drawThread( i );
+			}
+		}
+
+		p.drawThread = function( id )
+		{
+			var thread = this.threads[id];
+			if((thread == null) || (thread.length < 0))
+				return;
 
 			this.threadTextureDisplay.graphics.clear();
 			this.threadTextureDisplay.graphics.setStrokeStyle(5, "round");
 			this.threadTextureDisplay.graphics.beginBitmapStroke ( applicationData.getResult("thread") , "repeat" );
 
-			var offset = (this.thread.points.length > 0) ? (1) : (0);
-			var stitches = this.thread.stitches;
+			var offset = (thread.points.length > 0) ? (1) : (0);
+			var stitches = thread.stitches;
 
 			for( var i = 0; i < stitches.length-offset; i++)
 			{
@@ -136,7 +160,7 @@
 					this.threadDisplay.graphics
 						.setStrokeStyle(7,"round")
 						.setStrokeDash()
-						.beginStroke( tinycolor(this.thread.getColor()).darken(20).desaturate(50).setAlpha(.3).toRgbString() );
+						.beginStroke( tinycolor(thread.getColor()).darken(20).desaturate(50).setAlpha(.3).toRgbString() );
 
 					this.threadDisplay.graphics
 						.moveTo(start.x,start.y)
@@ -146,7 +170,7 @@
 					// Body
 					this.threadDisplay.graphics
 						.setStrokeStyle(5,"round")
-						.beginStroke(this.thread.getColor());
+						.beginStroke(thread.getColor());
 
 					this.threadDisplay.graphics
 						.moveTo(start.x,start.y)
@@ -157,26 +181,38 @@
 					// Highlight
 					this.threadDisplay.graphics
 						.setStrokeStyle(3,"round")
-						.beginStroke( tinycolor( this.thread.getColor() ).lighten(20).saturate(5).toHexString() );
+						.beginStroke( tinycolor( thread.getColor() ).lighten(20).saturate(5).toHexString() );
 
 					this.threadDisplay.graphics
 						.moveTo(start.x,start.y)
 						.lineTo(end.x,end.y)
 					.endStroke();
 				// }
-			}
+			}			
 		}
 
-		p.updatePoints = function()
+		p.updatePoints = function( id )
 		{
 			this.pointDisplay.graphics.clear();
 			this.pointTextureDisplay.graphics.clear();
 
-			if(this.thread.points.length <  1)
+			for(var i = 0; i < this.threads.length; i++)
+			{
+				this.drawPoints( i );
+			}
+		}
+
+		p.drawPoints = function( id )
+		{
+			var thread = this.threads[id];
+
+			//console.log(thread);
+
+			if((!thread) || (thread.points.length <=  0))
 			return;
 
 			//var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
-			var points = this.thread.points;
+			var points = thread.points;
 				//points.push( new Point(pt.x,pt.y) );
 
 			this.pointDisplay.graphics.moveTo( points[0].x, points[0].y);
@@ -188,7 +224,7 @@
 			var lastMidPoint = lastPoint;
 
 			this.pointDisplay.graphics.setStrokeStyle(7, "round");
-			this.pointDisplay.graphics.beginStroke( tinycolor(this.thread.getColor()).darken(20).desaturate(50).setAlpha(.3).toRgbString() );	
+			this.pointDisplay.graphics.beginStroke( tinycolor(thread.getColor()).darken(20).desaturate(50).setAlpha(.3).toRgbString() );	
 
 			for( var i = 1; i < points.length; i++)
 			{
@@ -210,7 +246,7 @@
 			lastMidPoint = lastPoint;
 
 			this.pointDisplay.graphics.setStrokeStyle(5, "round");
-			this.pointDisplay.graphics.beginStroke(this.thread.getColor());
+			this.pointDisplay.graphics.beginStroke(thread.getColor());
 
 			for( var i = 1; i < points.length; i++)
 			{
@@ -229,7 +265,7 @@
 			lastMidPoint = lastPoint;
 
 			this.pointDisplay.graphics.setStrokeStyle(3, "round");
-			this.pointDisplay.graphics.beginStroke(tinycolor( this.thread.getColor() ).lighten(20).saturate(5).toHexString() );
+			this.pointDisplay.graphics.beginStroke(tinycolor( thread.getColor() ).lighten(20).saturate(5).toHexString() );
 
 			for( var i = 1; i < points.length; i++)
 			{
@@ -262,14 +298,17 @@
 			}
 		}
 
-		p.animatePoints = function()
+		p.animatePoints = function( thread )
 		{
-			var start = this.thread.points[0];
-			var end = this.thread.points[this.thread.points.length-1];
+			if(!thread)
+				return;
 
-			for(var i = 1; i < this.thread.points.length-1; i++ )
+			var start = thread.points[0];
+			var end = thread.points[thread.points.length-1];
+
+			for(var i = 1; i < thread.points.length-1; i++ )
 			{
-				var point = this.thread.points[i];
+				var point = thread.points[i];
 				var tween = createjs.Tween.get(point).to(
 					{x: end.x, y: end.y},
 					300 - ( 4 * i ),
@@ -290,15 +329,39 @@
 			this.updateThread();
 		}
 
+		p.createThread = function()
+		{
+			var thread = new Thread( this.virtualgrid, threadId);
+			this.threads.push( thread );
+			return thread;
+		}
+
 		p.changeThread = function()
 		{
 			if( this.isPressing )
 				return;
 
-			this.thread.styleId = threadId;
-						
+			var thread = this.currentThread();
+
+			if((thread == null) || (this.threads.length <= 0) || (thread.stitches.length > 0))
+			{
+				var thread = new Thread( this.virtualgrid, threadId );
+				this.threads.push( thread );
+			}else{
+				thread.styleId = threadId;
+			}
+
 			this.updateThread();
 			this.updatePoints();
+		}
+
+		p.currentThread = function()
+		{
+			var length = this.threads.length;
+			if(length <= 0)
+				return null
+
+			return this.threads[length-1];			
 		}
 
 	window.Display = createjs.promote( Display, "Container" );
