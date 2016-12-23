@@ -6,13 +6,23 @@ var colors = {
 	primary : "#3a62a3",
 	secondary : "#64a33a"
 }
+// var threadStyle =
+// [
+// 	"#000000",
+// 	"#3a62a3",
+// 	"#64a33a",
+// 	"#ce0a38",
+// 	"#29cecc"
+// ];
+
 var threadStyle =
 [
-	"#000000",
-	"#3a62a3",
-	"#64a33a",
-	"#ce0a38"
-     
+	"#EA3556",
+	"#61D2D6",
+	"#EDE5E2",
+	"#ED146F",
+	"#EDDE45",
+	"#9BF0E9"
 ];
 var threadId = 0;
 var applicationData;

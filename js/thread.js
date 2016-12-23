@@ -1,10 +1,23 @@
 function Thread( virtualgrid, styleId )
 {
 	this.virtualgrid = virtualgrid;
-	this.styleId = styleId;
+	
 	this.points = [];
 	this.stitches = [];
 	this.currentStitch = null;
+
+	this.setColor( styleId );
+}
+
+Thread.prototype.setColor = function( styleId )
+{
+	var styleColor = threadStyle[styleId];
+	
+	this.highlightColor = styleColor;
+	this.color = tinycolor(styleColor).darken(20).desaturate(5).toHexString();
+	this.shadowColor = tinycolor(styleColor).darken(20).desaturate(50).setAlpha(.3).toRgbString();
+
+	this.styleId = styleId;
 }
 
 Thread.prototype.addPoint = function( x,y )
@@ -65,20 +78,19 @@ Thread.prototype.undoStitch = function()
 
 Thread.prototype.getColor = function()
 {
-	return threadStyle[this.styleId];
+	return this.color;
 }
 
 Thread.prototype.getHighlightColor = function()
 {
-	var color = tinycolor( this.getColor() ).lighten(20).saturate(5).toHexString() 
-	return color;
+	//var color = tinycolor( this.getColor() ).lighten(20).saturate(5).toHexString() 
+	return this.highlightColor;
 }
 
 
 Thread.prototype.getShadowColor = function()
 {
-	var color = tinycolor(this.getColor()).darken(20).desaturate(50).setAlpha(.3).toRgbString();
-	return color;
+	return this.shadowColor;
 }
 
 Thread.prototype.getData = function()
