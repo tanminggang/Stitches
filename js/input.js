@@ -75,9 +75,12 @@ Input.prototype.keyDown = function ( event )
 			this.spacebarDown = true;
 			break;
 		// DON'T LIKE THE KEY. KEEP HITTING THIS WHEN TRYING TO HIT SPACE, SHOULD REQUIRE A MODIFIER KEY
-		// case 67: 	// 'c'
-		// 	this.display.clear();
-		// 	break;
+		case 67: 	// 'c'
+			var shouldClear = confirm("Clear Stiches?");
+			console.log(shouldClear);
+			if(shouldClear)
+				this.display.clear();
+			break;
 		case 90: 	// 'z'
 			this.display.undo();
 			break;
@@ -168,7 +171,7 @@ Input.prototype.load = function( data )
 			thread.loadData( threadData );
 	}
 
-	this.display.updateThread();
+	this.display.updateThreads();
 
 	if(nativeData.panPosition)
 	{

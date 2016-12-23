@@ -63,7 +63,7 @@
 			this.lastPoint = pt;
 			thread.clearPoints();
 
-			this.updateThread();
+			this.updateThreads();
 
 
 			thread.addPoint( point.x,point.y );
@@ -87,7 +87,7 @@
 			//DISCO CODE
 			//this.thread.styleId = (this.thread.styleId + 1 ) % 4;
 
-			this.updateThread();
+			this.updateThreads();
 			this.animatePoints( thread );
 
 			this.isPressing = false;
@@ -118,7 +118,7 @@
 			}
 		}
 
-		p.updateThread = function()
+		p.updateThreads = function()
 		{
 			this.threadDisplay.graphics.clear();
 			this.threadTextureDisplay.graphics.clear();
@@ -320,8 +320,14 @@
 
 		p.clear = function()
 		{
-			this.thread.clearAll();
-			this.updateThread();
+			for(var i = 0; i < this.threads.length; i++ )
+			{
+				var thread = this.threads[i];
+					thread.clearAll();
+			}
+
+			this.updateThreads();
+			this.updatePoints();
 		}
 
 		p.undo = function()
@@ -340,7 +346,7 @@
 			if(thread.stitches.length <= 0)
 				this.threads.pop();
 
-			this.updateThread();
+			this.updateThreads();
 		}
 
 		p.createThread = function()
@@ -368,7 +374,7 @@
 				thread.setColor(threadId);
 			}
 
-			this.updateThread();
+			this.updateThreads();
 			this.updatePoints();
 		}
 
