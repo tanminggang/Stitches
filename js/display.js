@@ -330,6 +330,10 @@
 				return;
 
 			var thread = this.currentThread();
+
+			if(thread == null)
+				return;
+			
 				thread.clearPoints();
 				thread.undoStitch();
 
