@@ -67,20 +67,18 @@ function applicationReady( event )
 /*
 
 	TODO
+	- add additional colors
+	- tweak colors
+	- help screen
+	- welcome screen
 	- need to rearchitect because of display bugs
 		( add display objects for each thread, need to cache unactive threads )
 		( add maximum number of stitches per thread to allow better caching )
 	- look at CRUD display Architecture
 	- fix thread going to final pointer position
-	- more visible cursor
 	- need delete
-	- need seperate lines
 	- add ability to add knots at a point or ignore the same end + start point when creating threads
-	- fix basic color selection with keyboard
 	- show backing threads
-	- add additional colors
-	- tweak colors
-	- cut thread
 	- design initial dealyo
 	- could do active cacheing to make it run better
 

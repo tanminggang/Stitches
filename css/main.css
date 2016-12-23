@@ -27,8 +27,8 @@ body
 .menu
 {
 	position: absolute;
-	left: 30%;
-	right: 30%;
+	left: 35%;
+	right: 35%;
 	z-index: 10;
 	cursor: hand;
 }
@@ -44,16 +44,14 @@ nav ul
 {
 	display: table-row;
     margin: 0;
-    padding: 0;
+    padding: 0;  
 }
 
 nav ul li {
     list-style: none;
     display: table-cell;
     text-align: center;
-    height: 60px;/*
-    padding-left:3px;
-    padding-right:3px;*/
+    height: 30px;
 }
 
 nav ul li a
@@ -61,7 +59,7 @@ nav ul li a
 	display: block;
 	color: #00000000;
 	height: 15px;
-	background-image: url("../imgs/groovepaper.png");
+	background-image: url("../imgs/grey-jean.png");
 	opacity: 0.3;
 	/*box-sizing:border-box;*/
 	/*transition: border .5s;*/
