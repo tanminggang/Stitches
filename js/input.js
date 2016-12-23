@@ -86,6 +86,9 @@ Input.prototype.keyDown = function ( event )
 			break;
 		case 90: 	// 'z'
 			this.display.undo();
+			var thread = this.display.currentThread();
+			if(thread)
+				this.changeThreadUI( thread.styleId );		
 			break;			
 		default:
 			//console.log( event.keyCode);
@@ -105,10 +108,7 @@ Input.prototype.changeThread = function( id )
 	{
 		threadId = id;
 		this.display.changeThread();
-		$("nav#colors ul li a")
-			.removeClass("selected")	
-			.eq(id)
-			.addClass("selected");
+		this.changeThreadUI( id );
 			//.append('<i class="fa fa-heart" aria-hidden="true"></i>');	
 		return true;
 		/*
@@ -119,6 +119,14 @@ Input.prototype.changeThread = function( id )
 	}
 
 	return false;
+}
+
+Input.prototype.changeThreadUI = function( id )
+{
+	$("nav#colors ul li a")
+		.removeClass("selected")	
+		.eq(id)
+		.addClass("selected");
 }
 
 Input.prototype.keyUp = function ( event )
