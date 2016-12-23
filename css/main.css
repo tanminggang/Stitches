@@ -21,19 +21,16 @@ body
 
 .menu#bottom
 {
-	bottom: -4px;
-	transition: bottom .2s;
+	bottom: 15px;
 }
 
 .menu
 {
 	position: absolute;
-	left: 0px;
-	right: 0px;
-	background: #292A25;
-	color: #FFF;
+	left: 30%;
+	right: 30%;
 	z-index: 10;
-	text-transform: uppercase;
+	cursor: hand;
 }
 
 nav
@@ -54,22 +51,37 @@ nav ul li {
     list-style: none;
     display: table-cell;
     text-align: center;
+    height: 60px;
 }
 
 nav ul li a
 {
 	display: block;
 	color: #00000000;
+	height: 30px;
+	background-image: url("../imgs/groovepaper.png");
+	/*box-sizing:border-box;*/
+	/*transition: border .5s;*/
+}
+
+nav ul li:first-child a
+{
+	border-radius: 50px 0px 0px 50px;	
+}
+
+nav ul li:last-child a
+{
+	border-radius: 0px 50px 50px 0px;
 }
 
 nav ul li a:hover
 {
-
+	
 }
 
 nav ul li a.selected
 {
-
+	background-color: #FFFFFF;
 }
 
 nav ul li a.selected:hover

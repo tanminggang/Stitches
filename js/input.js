@@ -26,7 +26,8 @@ Input.prototype.createColorNav = function()
 	{
 		var keyId = i +1;
 		var color = threadStyle[i];
-		var element = $('<li><a href="#" style="background-color:' + color +'">'+keyId+'</a></li>');
+		var thread = new Thread(null, i);
+		var element = $('<li><a href="#" style="background-color:' + thread.getHighlightColor() +'">'+keyId+'</a></li>');
 			element.data("styleId", i );
 			element.click( function(){
 				self.changeThread( $(this).data("styleId") );
@@ -102,8 +103,17 @@ Input.prototype.changeThread = function( id )
 	{
 		threadId = id;
 		this.display.changeThread();
-		$("nav#colors ul li a").removeClass("selected").eq(id).addClass("selected");
+		$("nav#colors ul li a")
+			.removeClass("selected")	
+			.eq(id)
+			.addClass("selected");
+			//.append('<i class="fa fa-heart" aria-hidden="true"></i>');	
 		return true;
+		/*
+			-webkit-transform: height .5s;
+			transition: height .5s;
+		*/
+
 	}
 
 	return false;

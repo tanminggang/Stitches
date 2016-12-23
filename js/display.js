@@ -161,7 +161,7 @@
 					this.threadDisplay.graphics
 						.setStrokeStyle(7,"round")
 						.setStrokeDash()
-						.beginStroke( tinycolor(thread.getColor()).darken(20).desaturate(50).setAlpha(.3).toRgbString() );
+						.beginStroke( thread.getShadowColor() );
 
 					this.threadDisplay.graphics
 						.moveTo(start.x,start.y)
@@ -182,7 +182,7 @@
 					// Highlight
 					this.threadDisplay.graphics
 						.setStrokeStyle(3,"round")
-						.beginStroke( tinycolor( thread.getColor() ).lighten(20).saturate(5).toHexString() );
+						.beginStroke( thread.getHighlightColor() );
 
 					this.threadDisplay.graphics
 						.moveTo(start.x,start.y)
@@ -226,7 +226,7 @@
 			var lastMidPoint = lastPoint;
 
 			this.pointDisplay.graphics.setStrokeStyle(7, "round");
-			this.pointDisplay.graphics.beginStroke( tinycolor(thread.getColor()).darken(20).desaturate(50).setAlpha(.3).toRgbString() );	
+			this.pointDisplay.graphics.beginStroke( thread.getShadowColor() );	
 
 			for( var i = 1; i < points.length; i++)
 			{
@@ -267,7 +267,7 @@
 			lastMidPoint = lastPoint;
 
 			this.pointDisplay.graphics.setStrokeStyle(3, "round");
-			this.pointDisplay.graphics.beginStroke(tinycolor( thread.getColor() ).lighten(20).saturate(5).toHexString() );
+			this.pointDisplay.graphics.beginStroke( thread.getHighlightColor() );
 
 			for( var i = 1; i < points.length; i++)
 			{

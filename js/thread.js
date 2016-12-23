@@ -68,6 +68,19 @@ Thread.prototype.getColor = function()
 	return threadStyle[this.styleId];
 }
 
+Thread.prototype.getHighlightColor = function()
+{
+	var color = tinycolor( this.getColor() ).lighten(20).saturate(5).toHexString() 
+	return color;
+}
+
+
+Thread.prototype.getShadowColor = function()
+{
+	var color = tinycolor(this.getColor()).darken(20).desaturate(50).setAlpha(.3).toRgbString();
+	return color;
+}
+
 Thread.prototype.getData = function()
 {
 	var stitchData = [];
