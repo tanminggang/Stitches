@@ -333,7 +333,7 @@
 
 			if(thread == null)
 				return;
-			
+
 				thread.clearPoints();
 				thread.undoStitch();
 
@@ -365,7 +365,7 @@
 				var thread = new Thread( this.virtualgrid, threadId );
 				this.threads.push( thread );
 			}else{
-				thread.styleId = threadId;
+				thread.setColor(threadId);
 			}
 
 			this.updateThread();

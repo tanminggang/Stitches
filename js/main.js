@@ -200,6 +200,19 @@ var threadStyle =
 	"#61544c"
 ];
 
+// // Rainblow
+// var threadStyle =
+// [
+// 	"#900101",
+// 	"#905501",
+// 	"#c6ad04",
+// 	"#84c604",
+// 	"#04c66d",
+// 	"#04c4c6",
+// 	"#044dc6",
+// 	"#7604c6",
+// 	"#c6045f"
+// ];
 
 // // Original
 // var threadStyle =
