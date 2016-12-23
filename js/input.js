@@ -26,9 +26,7 @@ Input.prototype.createHelpNav = function()
 	var self = this;
 	var helpBtn = $('#top a');
 		helpBtn.click( function(){
-			self.resetZoom();
-			self.display.visible = (self.display.visible)?(false):(true);
-			$('#center a').fadeToggle();//slideToggle();		
+			self.toggleHelp();
 		});
 
 }
@@ -51,6 +49,14 @@ Input.prototype.createColorNav = function()
 			element.find("a").attr("class","selected");
 		$( "nav#colors ul" ).append( element );
 	}
+}
+
+Input.prototype.toggleHelp = function()
+{
+	var self = (self == null)?(this):(self);
+	self.resetZoom();
+	self.display.visible = (self.display.visible)?(false):(true);
+	$('#center a').fadeToggle();//slideToggle();			
 }
 
 Input.prototype.updateLastPosition = function()
@@ -88,6 +94,9 @@ Input.prototype.keyDown = function ( event )
 		case 32: 	// 'space'
 			this.updateLastPosition();
 			this.spacebarDown = true;
+			break;
+		case 72: // 'h'
+			this.toggleHelp();
 			break;
 		// DON'T LIKE THE KEY. KEEP HITTING THIS WHEN TRYING TO HIT SPACE, SHOULD REQUIRE A MODIFIER KEY
 		case 67: 	// 'c'
