@@ -14,6 +14,7 @@
 		p.setup = function()
 		{
 			this.lastPoint = null;
+			this.animation = null;
 
 			this.stitchDisplay = new createjs.Shape();
 			this.stitchTextureDisplay = new createjs.Shape();
@@ -162,11 +163,11 @@
 
 		p.drawPoints = function()
 		{
-			if(!this.data.hasPoints())
-				return;
-
 			this.pointDisplay.graphics.clear();
 			this.pointTextureDisplay.graphics.clear();
+
+			if(!this.data.hasPoints())
+				return;
 
 			var points = this.data.points;
 
@@ -256,9 +257,10 @@
 
 		p.animatePoints = function()
 		{
-			// Animation Stuff
+			this.animationsCompleted = 0;
 			var start = this.data.points[0];
 			var end = this.data.points[this.data.points.length-1];
+			var self = this;
 
 			for(var i = 1; i < this.data.points.length-1; i++ )
 			{
@@ -266,7 +268,14 @@
 				var tween = createjs.Tween.get(point).to(
 					{x: end.x, y: end.y},
 					300 - ( 4 * i ),
-					createjs.Ease.quadInOut);
+					createjs.Ease.quadInOut).call( function(){
+						self.animationsCompleted++;
+						if( self.animationsCompleted >= self.data.points.length - 2 )
+						{
+							self.data.clearPoints();
+							self.drawStitches();
+						}
+					});
 			}			
 		}
 

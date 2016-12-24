@@ -107,9 +107,12 @@
 
 				thread.undo();
 
-			if(thread.stitches.length <= 0)
+			if(this.threads.length <= 1)
+				return;
+
+			if(!thread.data.hasStitches())
 			{
-				removeChild( thread );
+				this.removeChild( thread );
 				this.threads.pop();
 			}
 
