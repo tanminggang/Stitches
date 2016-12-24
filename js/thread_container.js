@@ -83,7 +83,19 @@
 
 		p.undo = function()
 		{
+			var thread = this.currentThread();
 
+			if(thread == null)
+				return;
+
+				thread.undo();
+
+			if(thread.stitches.length <= 0)
+			{
+				removeChild( thread );
+				this.threads.pop();
+			}
+			
 		}
 
 	window.ThreadContainer = createjs.promote( ThreadContainer, "Container" );
