@@ -216,6 +216,8 @@
 				lastMidPoint = midPoint;
 				midpoints[i] = midPoint;
 			}
+			this.pointDisplay.graphics.moveTo(lastMidPoint.x,lastMidPoint.y);
+			this.pointDisplay.graphics.lineTo(lastPoint.x,lastPoint.y);			
 			// this.pointDisplay.graphics.lineTo(lastPoint.x,lastPoint.y);
 			this.pointDisplay.graphics.endStroke();
 
@@ -238,7 +240,8 @@
 				lastMidPoint = midPoint;
 				lastPoint = point;
 			}
-			// this.pointDisplay.graphics.lineTo(lastPoint.x,lastPoint.y);
+			this.pointDisplay.graphics.moveTo(lastMidPoint.x,lastMidPoint.y);
+			this.pointDisplay.graphics.lineTo(lastPoint.x,lastPoint.y);
 
 			// Highlight
 			lastPoint = points[0];
@@ -258,6 +261,8 @@
 				lastMidPoint = midPoint;
 				lastPoint = point;
 			}
+			this.pointDisplay.graphics.moveTo(lastMidPoint.x,lastMidPoint.y);
+			this.pointDisplay.graphics.lineTo(lastPoint.x,lastPoint.y);			
 			// this.pointDisplay.graphics.lineTo(lastPoint.x,lastPoint.y);
 
 			// Texture
@@ -278,6 +283,8 @@
 				lastMidPoint = midPoint;
 				lastPoint = point;
 			}
+			this.pointTextureDisplay.graphics.moveTo(lastMidPoint.x,lastMidPoint.y);
+			this.pointTextureDisplay.graphics.lineTo(lastPoint.x,lastPoint.y);
 			// this.pointTextureDisplay.graphics.lineTo(lastPoint.x,lastPoint.y);
 
 		}
