@@ -152,7 +152,6 @@
 						.lineTo(end.x,end.y)
 						.endStroke();
 
-
 					// Highlight
 					this.stitchDisplay.graphics
 						.setStrokeStyle(3,"round")
@@ -240,6 +239,7 @@
 				lastMidPoint = midPoint;
 				lastPoint = point;
 			}
+
 			// Texture
 			lastPoint = points[0];
 			lastMidPoint = lastPoint;
@@ -260,9 +260,11 @@
 			}
 		}
 
-		p.removeLastStitch = function()
+		p.undo = function()
 		{
-
+			this.data.clearPoints();
+			this.data.undoStitch();
+			this.drawStitches();
 		}
 
 	window.Thread= createjs.promote( Thread, "Container" );
