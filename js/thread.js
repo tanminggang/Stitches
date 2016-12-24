@@ -112,8 +112,12 @@
 
 		p.drawStitches = function()
 		{
+			this.stitchTextureDisplay.uncache();	
+			this.stitchDisplay.uncache();
+
 			this.stitchDisplay.graphics.clear();
 			this.stitchTextureDisplay.graphics.clear();
+
 
 			if(!this.data.hasStitches())
 				return;
@@ -172,7 +176,11 @@
 					.endStroke();
 				// }
 			}
-			this.stitchTextureDisplay.graphics.endStroke();		
+
+			this.stitchTextureDisplay.graphics.endStroke();
+
+			this.stitchTextureDisplay.cache(canvas.width * -.5, canvas.height* -.5,canvas.width,canvas.height);	
+			this.stitchDisplay.cache(canvas.width* -.5,canvas.height* -.5,canvas.width,canvas.height);	
 		}
 
 		p.drawPoints = function()
