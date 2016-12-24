@@ -14,7 +14,7 @@
 		p.setup = function()
 		{
 			this.lastPoint = null;
-			this.animation = null;
+			this.tweens = [];
 
 			this.stitchDisplay = new createjs.Shape();
 			this.stitchTextureDisplay = new createjs.Shape();
@@ -45,6 +45,8 @@
 
 		p.pressDown = function()
 		{
+			createjs.Tween.removeAllTweens ( this );
+
 			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
 			var stitch = this.data.startStitch( pt.x, pt.y);
 			var point = stitch.startPosition.getCenteredPosition();
@@ -80,6 +82,9 @@
 			if(!this.lastPoint)
 				return;
 
+			// if(!this.data.hasPoints())
+			// 	return;
+			
 			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
 
 			var sqrDistance = ( (pt.x - this.lastPoint.x) * (pt.x - this.lastPoint.x) +
@@ -91,8 +96,11 @@
 				this.lastPoint = pt;
 			} else {
 				var point = this.data.points[ this.data.points.length - 1 ];
-					point.x = pt.x;
+					point.x = pt.x;			/// why is this dead?!?!?! Can't figure it out
 					point.y = pt.y;
+
+					if(pt == null)
+						console.log( pt );
 			}
 		}
 
@@ -194,6 +202,7 @@
 				lastMidPoint = midPoint;
 				midpoints[i] = midPoint;
 			}
+			// this.pointDisplay.graphics.lineTo(lastPoint.x,lastPoint.y);
 			this.pointDisplay.graphics.endStroke();
 
 
@@ -215,6 +224,7 @@
 				lastMidPoint = midPoint;
 				lastPoint = point;
 			}
+			// this.pointDisplay.graphics.lineTo(lastPoint.x,lastPoint.y);
 
 			// Highlight
 			lastPoint = points[0];
@@ -234,6 +244,7 @@
 				lastMidPoint = midPoint;
 				lastPoint = point;
 			}
+			// this.pointDisplay.graphics.lineTo(lastPoint.x,lastPoint.y);
 
 			// Texture
 			lastPoint = points[0];
@@ -253,11 +264,14 @@
 				lastMidPoint = midPoint;
 				lastPoint = point;
 			}
+			// this.pointTextureDisplay.graphics.lineTo(lastPoint.x,lastPoint.y);
+
 		}
 
 		p.animatePoints = function()
 		{
 			this.animationsCompleted = 0;
+
 			var start = this.data.points[0];
 			var end = this.data.points[this.data.points.length-1];
 			var self = this;
@@ -265,7 +279,7 @@
 			for(var i = 1; i < this.data.points.length-1; i++ )
 			{
 				var point = this.data.points[i];
-				var tween = createjs.Tween.get(point).to(
+				this.tweens[i] = createjs.Tween.get(point, {override: true}).to(
 					{x: end.x, y: end.y},
 					300 - ( 4 * i ),
 					createjs.Ease.quadInOut).call( function(){
@@ -279,16 +293,11 @@
 			}			
 		}
 
-		// p.forceThreadComplete = function()
-		// {
-		// 	if(!this.date.hasPoints())
-		// 		return;
-
-		// 	var point = stitch.endPosition.getCenteredPosition();
-
-		// 	this.data.addPoint( point.x,point.y );
-		// 	this.animatePoints();
-		// }
+		p.clearPointAnimation = function()
+		{
+			createjs.Tween.removeAllTweens ( this );			
+			this.data.clearPoints();
+		}
 
 		p.undo = function()
 		{

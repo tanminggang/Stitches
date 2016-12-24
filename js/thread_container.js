@@ -20,9 +20,9 @@
 			
 			this.addThread();
 
-			stage.on("stagemousedown", this.pressDown, this);
-			stage.on("stagemouseup", this.pressUp, this);
+			stage.on("stagemousedown", this.pressDown, this);			
 			stage.on("stagemousemove", this.pressMove, this);			
+			stage.on("stagemouseup", this.pressUp, this);
 		}
 
 		p.pressDown = function( event )
@@ -57,12 +57,15 @@
 
 		p.changeThread = function()
 		{
+			if(this.isPressing)
+				return;
+			
 			var thread = this.currentThread();
 
 			if(( thread == null ) || ( !this.hasThreads() ) || ( thread.data.hasStitches() ))
 			{
-				//if( thread.data.hasPoints() )
-				//	thread.data.clearPoints();
+				if( thread.data.hasPoints() )
+					thread.clearPointAnimation();
 
 				this.addThread();
 			}else{
@@ -81,6 +84,9 @@
 
 		p.clearThreads = function()
 		{
+			if(this.isPressing)
+				return;
+
 			for(var i = 0; i < this.threads.length; i++)
 			{
 				var thread = this.threads[i];
@@ -100,6 +106,9 @@
 
 		p.undo = function()
 		{
+			if(this.isPressing)
+				return;
+
 			var thread = this.currentThread();
 
 			if(thread == null)
