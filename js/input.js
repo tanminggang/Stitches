@@ -191,7 +191,7 @@ Input.prototype.save = function()
 
 	for(var i = 0; i < this.threadContainer.threads.length; i++)
 	{
-		data.threads[i] = this.threadContainer.threads[i].getData();
+		data.threads[i] = this.threadContainer.threads[i].data.getData();
 	}
 	
 	var blob = new Blob([ JSON.stringify( data )], {type:"text/json"});
@@ -202,6 +202,8 @@ Input.prototype.save = function()
 
 Input.prototype.load = function( data )
 {
+	this.threadContainer.clearThreads();
+	
 	var nativeData = JSON.parse(data);
 
 	this.threadContainer.threads = [];
