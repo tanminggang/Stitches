@@ -302,6 +302,11 @@ function applicationReady( event )
 	- add ability to add knots at a point or ignore the same end + start point when creating threads
 	- show backing threads
 	- add vignette to create mood
+	- simplify json to make file sizes smaller
+	- add buttons for controls like undo, center, move, zoom, clear
+	- add 'hide interface' button and command
+	- add intro screen
+	- make help editable html
 	- mobile zoom
 	- mobile interface tweaks
 
