@@ -43,7 +43,7 @@
 			this.lastPoint = pt;
 			this.data.clearPoints();
 
-			// this.updateThreads();
+			this.drawStitches();
 
 			this.data.addPoint( point.x,point.y );
 			this.data.addPoint( point.x,point.y );
@@ -58,8 +58,7 @@
 			var point = stitch.endPosition.getCenteredPosition();
 
 			this.data.addPoint( point.x,point.y );
-
-			// this.updateThreads();
+			this.drawStitches();
 
 			var start = this.data.points[0];
 			var end = this.data.points[this.data.points.length-1];
@@ -114,7 +113,7 @@
 			this.stitchTextureDisplay.graphics.setStrokeStyle(5, "round");
 			this.stitchTextureDisplay.graphics.beginBitmapStroke ( applicationData.getResult("thread") , "repeat" );
 
-			var offset = (this.data.points.length > 0) ? (1) : (0);
+			var offset = (this.data.hasPoints() > 0) ? (1) : (0);
 			var stitches = this.data.stitches;
 
 			for( var i = 0; i < stitches.length-offset; i++)
