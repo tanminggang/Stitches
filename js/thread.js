@@ -1,164 +1,272 @@
-function Thread( virtualgrid, styleId )
-{
-	this.virtualgrid = virtualgrid;
-	
-	this.points = [];
-	this.stitches = [];
-	this.currentStitch = null;
+(function(){
 
-	this.setColor( styleId );
-}
 
-Thread.prototype.setColor = function( styleId )
-{
-	var styleColor = threadStyle[styleId];
-	
-	// this.highlightColor = styleColor;
-	// this.color = tinycolor(styleColor).darken(20).desaturate(5).toHexString();
-	// this.shadowColor = tinycolor(styleColor).darken(20).desaturate(50).setAlpha(.3).toRgbString();
-
-	this.highlightColor = tinycolor(styleColor).lighten(20).saturate(5).toHexString();
-	this.color = styleColor;
-	this.shadowColor = tinycolor(styleColor).darken(20).desaturate(50).setAlpha(.3).toRgbString();
-
-	this.styleId = styleId;
-}
-
-Thread.prototype.addPoint = function( x,y )
-{
-	var point = new Point(x,y);
-	this.points.push( point );
-}
-
-Thread.prototype.clearAll = function()
-{
-	this.clearPoints();
-	this.clearStitches();	
-}
-
-Thread.prototype.clearPoints = function(  )
-{
-	this.points = [];
-}
-
-Thread.prototype.startStitch = function(x,y)
-{
-	if(this.currentStitch != null)
-		return null;
-
-	this.currentStitch = new Stitch( this.virtualgrid );
-	this.currentStitch.setStartPosition( x,y );
-
-	return this.currentStitch;
-}
-
-Thread.prototype.endStitch = function(x,y)
-{
-	if(this.currentStitch)
+	function Thread( virtualgrid, data )
 	{
-		var stitch = this.currentStitch;
-		stitch.setEndPosition(x,y);
-		this.stitches.push( stitch );
-		this.currentStitch = null;
+		this.Container_constructor();
+		this.virtualgrid = virtualgrid;
+		this.data = data;
 
-		return stitch;
+		this.setup();
 	}
-}
 
-Thread.prototype.clearStitches = function()
-{
-	this.currentStitch = null;
-	this.stitches = [];
-}
+	var p = createjs.extend( Thread, createjs.Container );
 
-Thread.prototype.undoStitch = function()
-{
-	if(this.currentStitch)
-		return;
+		p.setup = function()
+		{
+			this.stitchDisplay = new createjs.Shape();
+			this.stitchTextureDisplay = new createjs.Shape();
+			this.stitchTextureDisplay.compositeOperation = 'screen';
+			this.stitchTextureDisplay.alpha = 0.3;
 
-	if(this.stitches.length > 0)
-		this.stitches.pop();	
-}
+			this.pointDisplay = new createjs.Shape();
+			this.pointTextureDisplay = new createjs.Shape();
+			this.pointTextureDisplay.compositeOperation = 'screen';
+			this.pointTextureDisplay.alpha = 0.3;
 
-Thread.prototype.getColor = function()
-{
-	return this.color;
-}
+			this.addChild( this.stitchDisplay, this.pointDisplay, this.pointTextureDisplay, this.stitchTextureDisplay );
 
-Thread.prototype.getHighlightColor = function()
-{
-	//var color = tinycolor( this.getColor() ).lighten(20).saturate(5).toHexString() 
-	return this.highlightColor;
-}
+			this.isPressing = false;
+
+			stage.on("stagemousedown", this.pressDown, this);
+			stage.on("stagemouseup", this.pressUp, this);
+			stage.on("stagemousemove", this.pressMove, this);
+			this.on("tick", this.update, this);
+		}
+
+		p.pressDown = function( event )
+		{
+			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
+			var stitch = this.data.startStitch( pt.x, pt.y);
+			var point = stitch.startPosition.getCenteredPosition();
+
+			this.lastPoint = pt;
+			this.data.clearPoints();
+
+			// this.updateThreads();
+
+			this.data.addPoint( point.x,point.y );
+			this.data.addPoint( point.x,point.y );
+
+			this.isPressing = true;
+		}
+
+		p.pressUp = function( event )
+		{
+			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
+			var stitch = this.data.endStitch( pt.x, pt.y);
+			var point = stitch.endPosition.getCenteredPosition();
+
+			this.data.addPoint( point.x,point.y );
+
+			// this.updateThreads();
+
+			var start = this.data.points[0];
+			var end = this.data.points[this.data.points.length-1];
+
+			for(var i = 1; i < this.data.points.length-1; i++ )
+			{
+				var point = this.data.points[i];
+				var tween = createjs.Tween.get(point).to(
+					{x: end.x, y: end.y},
+					300 - ( 4 * i ),
+					createjs.Ease.quadInOut);
+			}
+
+			this.isPressing = false;
+		}
+
+		p.pressMove = function( event )
+		{
+			if(!this.isPressing)
+				return;
+
+			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
+
+			var sqrDistance = ( (pt.x - this.lastPoint.x) * (pt.x - this.lastPoint.x) +
+			(pt.y - this.lastPoint.y) * (pt.y - this.lastPoint.y) )
+
+			if( sqrDistance > 200 )
+			{
+				this.data.addPoint( pt.x,pt.y );
+				this.lastPoint = pt;
+			} else {
+				var point = this.data.points[ this.data.points.length - 1 ];
+					point.x = pt.x;
+					point.y = pt.y;
+			}
+		}
+
+		p.update = function( event )
+		{
+			this.drawStitches();
+			this.drawPoints();
+		}
+
+		p.drawStitches = function()
+		{
+			this.stitchDisplay.graphics.clear();
+			this.stitchTextureDisplay.graphics.clear();
+
+			if(!this.data.hasStitches())
+				return;
+
+			this.stitchTextureDisplay.graphics.setStrokeStyle(5, "round");
+			this.stitchTextureDisplay.graphics.beginBitmapStroke ( applicationData.getResult("thread") , "repeat" );
+
+			var offset = (this.data.points.length > 0) ? (1) : (0);
+			var stitches = this.data.stitches;
+
+			for( var i = 0; i < stitches.length-offset; i++)
+			{
+				var stitch = stitches[i];
+				var start = stitch.startPosition.getCenteredPosition();
+				var end = stitch.endPosition.getCenteredPosition();
+
+				// Draw French Knot or Thread
+				// if((start.x == end.x)&&(start.y == end.y))
+				// {
+				// 	console.log("french knot");
+				// }else{
+					// Texture
+					this.stitchTextureDisplay.graphics
+						.moveTo(start.x,start.y)
+						.lineTo(end.x,end.y)
+
+					// Shadow 
+					this.stitchDisplay.graphics
+						.setStrokeStyle(7,"round")
+						.setStrokeDash()
+						.beginStroke( this.data.getShadowColor() );
+
+					this.stitchDisplay.graphics
+						.moveTo(start.x,start.y)
+						.lineTo(end.x,end.y)
+						.endStroke();
+
+					// Body
+					this.stitchDisplay.graphics
+						.setStrokeStyle(5,"round")
+						.beginStroke(this.data.getColor());
+
+					this.stitchDisplay.graphics
+						.moveTo(start.x,start.y)
+						.lineTo(end.x,end.y)
+						.endStroke();
 
 
-Thread.prototype.getShadowColor = function()
-{
-	return this.shadowColor;
-}
+					// Highlight
+					this.stitchDisplay.graphics
+						.setStrokeStyle(3,"round")
+						.beginStroke( this.data.getHighlightColor() );
 
-Thread.prototype.getData = function()
-{
-	var stitchData = [];
-	for( var i = 0; i < this.stitches.length; i++)
-	{
-		stitchData[i] = this.stitches[i].getData();
-	}
-	var data = {
-		styleId : this.styleId,
-		stitchData : stitchData
-	};
-	return data;
-}
+					this.stitchDisplay.graphics
+						.moveTo(start.x,start.y)
+						.lineTo(end.x,end.y)
+					.endStroke();
+				// }
+			}
+			this.stitchTextureDisplay.graphics.endStroke();		
+		}
 
-Thread.prototype.loadData = function( data )
-{
-	this.clearAll();
-	this.setColor( data.styleId );
-	for(var i = 0; i < data.stitchData.length; i++)
-	{
-		var stitch = new Stitch( this.virtualgrid ); 
-			stitch.loadData( data.stitchData[i] );
+		p.drawPoints = function()
+		{
+			if(!this.data.hasPoints())
+				return;
 
-		this.stitches[i] = stitch;
-	}
-}
+			this.pointDisplay.graphics.clear();
+			this.pointTextureDisplay.graphics.clear();
 
-// ----------------------------------------------------------------
+			var points = this.data.points;
 
-function Stitch( virtualgrid )
-{
-	this.virtualgrid = virtualgrid;
-}
+			this.pointDisplay.graphics.moveTo( points[0].x, points[0].y);
+			this.pointTextureDisplay.graphics.moveTo( points[0].x, points[0].y);
 
-Stitch.prototype.setStartPosition = function( x, y )
-{
-	this.startPosition = this.virtualgrid.GetVirtualPosition(x,y);
-}
+			// Shadow
+			var midpoints = [];
+			var lastPoint = points[0];
+			var lastMidPoint = lastPoint;
 
-Stitch.prototype.setEndPosition = function( x, y )
-{
-	this.endPosition = this.virtualgrid.GetVirtualPosition(x,y);
-}
+			this.pointDisplay.graphics.setStrokeStyle(7, "round");
+			this.pointDisplay.graphics.beginStroke( this.data.getShadowColor() );	
 
-Stitch.prototype.loadData = function( data )
-{
-	var startGridPosition = data.startGridPosition;
-	var endGridPosition = data.endGridPosition;
+			for( var i = 1; i < points.length; i++)
+			{
+				var point = points[i];
+				var midPoint = point.add( lastPoint ).scale( .5 );
 
-	this.startPosition = this.virtualgrid.GetVirtualPosition(0,0);
-	this.endPosition = this.virtualgrid.GetVirtualPosition(0,0);
+				this.pointDisplay.graphics.moveTo( midPoint.x, midPoint.y )
+					.curveTo(lastPoint.x, lastPoint.y, lastMidPoint.x, lastMidPoint.y );
 
-	this.startPosition.setGridPosition( startGridPosition.x, startGridPosition.y );
-	this.endPosition.setGridPosition( endGridPosition.x, endGridPosition.y );
-}
+				lastPoint = point;
+				lastMidPoint = midPoint;
+				midpoints[i] = midPoint;
+			}
+			this.pointDisplay.graphics.endStroke();
 
-Stitch.prototype.getData = function()
-{
-	var data = {
-		startGridPosition : this.startPosition.getGridPosition(),
-		endGridPosition : this.endPosition.getGridPosition()
-	};
-	return data;
-}
 
+			// Fill
+			lastPoint = points[0];
+			lastMidPoint = lastPoint;
+
+			this.pointDisplay.graphics.setStrokeStyle(5, "round");
+			this.pointDisplay.graphics.beginStroke(this.data.getColor());
+
+			for( var i = 1; i < points.length; i++)
+			{
+				var point = points[i];
+				var midPoint = midpoints[i];
+
+				this.pointDisplay.graphics.moveTo( midPoint.x, midPoint.y )
+					.curveTo(lastPoint.x, lastPoint.y, lastMidPoint.x, lastMidPoint.y );
+
+				lastMidPoint = midPoint;
+				lastPoint = point;
+			}
+
+			// Highlight
+			lastPoint = points[0];
+			lastMidPoint = lastPoint;
+
+			this.pointDisplay.graphics.setStrokeStyle(3, "round");
+			this.pointDisplay.graphics.beginStroke( this.data.getHighlightColor() );
+
+			for( var i = 1; i < points.length; i++)
+			{
+				var point = points[i];
+				var midPoint = midpoints[i];
+
+				this.pointDisplay.graphics.moveTo( midPoint.x, midPoint.y )
+					.curveTo(lastPoint.x, lastPoint.y, lastMidPoint.x, lastMidPoint.y );
+
+				lastMidPoint = midPoint;
+				lastPoint = point;
+			}
+			// Texture
+			lastPoint = points[0];
+			lastMidPoint = lastPoint;
+			
+			this.pointTextureDisplay.graphics.setStrokeStyle(5, "round");
+			this.pointTextureDisplay.graphics.beginBitmapStroke ( applicationData.getResult("thread") , "repeat" );		
+
+			for( var i = 1; i < points.length; i++)
+			{
+				var point = points[i];
+				var midPoint = midpoints[i];
+
+				this.pointTextureDisplay.graphics.moveTo( midPoint.x, midPoint.y )
+					.curveTo(lastPoint.x, lastPoint.y, lastMidPoint.x, lastMidPoint.y );
+
+				lastMidPoint = midPoint;
+				lastPoint = point;
+			}
+		}
+
+		p.removeLastStitch = function()
+		{
+
+		}
+
+	window.Thread= createjs.promote( Thread, "Container" );
+
+} () );
