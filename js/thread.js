@@ -1,164 +1,331 @@
-function Thread( virtualgrid, styleId )
-{
-	this.virtualgrid = virtualgrid;
-	
-	this.points = [];
-	this.stitches = [];
-	this.currentStitch = null;
+(function(){
 
-	this.setColor( styleId );
-}
-
-Thread.prototype.setColor = function( styleId )
-{
-	var styleColor = threadStyle[styleId];
-	
-	// this.highlightColor = styleColor;
-	// this.color = tinycolor(styleColor).darken(20).desaturate(5).toHexString();
-	// this.shadowColor = tinycolor(styleColor).darken(20).desaturate(50).setAlpha(.3).toRgbString();
-
-	this.highlightColor = tinycolor(styleColor).lighten(20).saturate(5).toHexString();
-	this.color = styleColor;
-	this.shadowColor = tinycolor(styleColor).darken(20).desaturate(50).setAlpha(.3).toRgbString();
-
-	this.styleId = styleId;
-}
-
-Thread.prototype.addPoint = function( x,y )
-{
-	var point = new Point(x,y);
-	this.points.push( point );
-}
-
-Thread.prototype.clearAll = function()
-{
-	this.clearPoints();
-	this.clearStitches();	
-}
-
-Thread.prototype.clearPoints = function(  )
-{
-	this.points = [];
-}
-
-Thread.prototype.startStitch = function(x,y)
-{
-	if(this.currentStitch != null)
-		return null;
-
-	this.currentStitch = new Stitch( this.virtualgrid );
-	this.currentStitch.setStartPosition( x,y );
-
-	return this.currentStitch;
-}
-
-Thread.prototype.endStitch = function(x,y)
-{
-	if(this.currentStitch)
+	function Thread( virtualgrid )
 	{
-		var stitch = this.currentStitch;
-		stitch.setEndPosition(x,y);
-		this.stitches.push( stitch );
-		this.currentStitch = null;
+		this.Container_constructor();
+		this.virtualgrid = virtualgrid;
+		this.data = new ThreadData( this.virtualgrid, threadId);
 
-		return stitch;
+		this.setup();
 	}
-}
 
-Thread.prototype.clearStitches = function()
-{
-	this.currentStitch = null;
-	this.stitches = [];
-}
+	var p = createjs.extend( Thread, createjs.Container );
 
-Thread.prototype.undoStitch = function()
-{
-	if(this.currentStitch)
-		return;
+		p.setup = function()
+		{
+			this.lastPoint = null;
+			this.tweens = [];
 
-	if(this.stitches.length > 0)
-		this.stitches.pop();	
-}
+			this.stitchDisplay = new createjs.Shape();
+			this.stitchTextureDisplay = new createjs.Shape();
+			this.stitchTextureDisplay.compositeOperation = 'screen';
+			this.stitchTextureDisplay.alpha = 0.3;
 
-Thread.prototype.getColor = function()
-{
-	return this.color;
-}
+			this.pointDisplay = new createjs.Shape();
+			this.pointTextureDisplay = new createjs.Shape();
+			this.pointTextureDisplay.compositeOperation = 'screen';
+			this.pointTextureDisplay.alpha = 0.3;
 
-Thread.prototype.getHighlightColor = function()
-{
-	//var color = tinycolor( this.getColor() ).lighten(20).saturate(5).toHexString() 
-	return this.highlightColor;
-}
+			this.addChild( this.stitchDisplay, this.pointDisplay, this.pointTextureDisplay, this.stitchTextureDisplay );
+
+			this.drawStitches();
+			
+			this.on("tick", this.update, this);
+			this.on("removed", this.removed,this);
+		}
+
+		p.removed = function( event )
+		{
+			this.off("tick", this.update, this);
+			this.off("removed", this.removed,this);
+		}
+
+		p.update = function( event )
+		{
+			this.drawPoints();
+		}
+
+		p.pressDown = function()
+		{
+			if( !this.stage )
+				return;
+
+			//createjs.Tween.removeAllTweens ( this );
+
+			for( var i = 0; i < this.tweens.length; i++)
+			{
+				var tween = this.tweens[i];
+				if(tween)
+					tween.setPaused(true);
+			}
+
+			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
+			var stitch = this.data.startStitch( pt.x, pt.y );
+			var point = stitch.startPosition.getCenteredPosition();
+
+			this.lastPoint = pt;
+			this.data.clearPoints();
+
+			this.drawStitches();
+
+			this.data.addPoint( point.x,point.y );
+			this.data.addPoint( point.x,point.y );
+		}
+
+		p.pressUp = function()
+		{
+			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
+			var stitch = this.data.endStitch( pt.x, pt.y);
+			var point = stitch.endPosition.getCenteredPosition();
+
+			this.data.addPoint( point.x,point.y );
+			this.drawStitches();
+
+			this.animatePoints();
+
+			this.lastPoint = null;
+		}
+
+		p.pressMove = function()
+		{
+			if(!this.lastPoint)
+				return;
+
+			// if(!this.data.hasPoints())
+			// 	return;
+			
+			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
+
+			var sqrDistance = ( (pt.x - this.lastPoint.x) * (pt.x - this.lastPoint.x) +
+			(pt.y - this.lastPoint.y) * (pt.y - this.lastPoint.y) )
+
+			if( sqrDistance > 200 )
+			{
+				this.data.addPoint( pt.x,pt.y );
+				this.lastPoint = pt;
+			} else {
+				var point = this.data.points[ this.data.points.length - 1 ];
+					point.x = pt.x;			/// why is this dead?!?!?! Can't figure it out
+					point.y = pt.y;
+			}
+		}
+
+		p.drawStitches = function()
+		{
+			this.stitchTextureDisplay.uncache();	
+			this.stitchDisplay.uncache();
+
+			this.stitchDisplay.graphics.clear();
+			this.stitchTextureDisplay.graphics.clear();
 
 
-Thread.prototype.getShadowColor = function()
-{
-	return this.shadowColor;
-}
+			if(!this.data.hasStitches())
+				return;
 
-Thread.prototype.getData = function()
-{
-	var stitchData = [];
-	for( var i = 0; i < this.stitches.length; i++)
-	{
-		stitchData[i] = this.stitches[i].getData();
-	}
-	var data = {
-		styleId : this.styleId,
-		stitchData : stitchData
-	};
-	return data;
-}
+			this.stitchTextureDisplay.graphics.setStrokeStyle(5, "round");
+			this.stitchTextureDisplay.graphics.beginBitmapStroke ( applicationData.getResult("thread") , "repeat" );
 
-Thread.prototype.loadData = function( data )
-{
-	this.clearAll();
-	this.setColor( data.styleId );
-	for(var i = 0; i < data.stitchData.length; i++)
-	{
-		var stitch = new Stitch( this.virtualgrid ); 
-			stitch.loadData( data.stitchData[i] );
+			var offset = (this.data.hasPoints() > 0) ? (1) : (0);
+			var stitches = this.data.stitches;
 
-		this.stitches[i] = stitch;
-	}
-}
+			for( var i = 0; i < stitches.length-offset; i++)
+			{
+				var stitch = stitches[i];
+				var start = stitch.startPosition.getCenteredPosition();
+				var end = stitch.endPosition.getCenteredPosition();
 
-// ----------------------------------------------------------------
+				// Draw French Knot or Thread
+				// if((start.x == end.x)&&(start.y == end.y))
+				// {
+				// 	console.log("french knot");
+				// }else{
+					// Texture
+					this.stitchTextureDisplay.graphics
+						.moveTo(start.x,start.y)
+						.lineTo(end.x,end.y)
 
-function Stitch( virtualgrid )
-{
-	this.virtualgrid = virtualgrid;
-}
+					// Shadow 
+					this.stitchDisplay.graphics
+						.setStrokeStyle(7,"round")
+						.setStrokeDash()
+						.beginStroke( this.data.getShadowColor() );
 
-Stitch.prototype.setStartPosition = function( x, y )
-{
-	this.startPosition = this.virtualgrid.GetVirtualPosition(x,y);
-}
+					this.stitchDisplay.graphics
+						.moveTo(start.x,start.y)
+						.lineTo(end.x,end.y)
+						.endStroke();
 
-Stitch.prototype.setEndPosition = function( x, y )
-{
-	this.endPosition = this.virtualgrid.GetVirtualPosition(x,y);
-}
+					// Body
+					this.stitchDisplay.graphics
+						.setStrokeStyle(5,"round")
+						.beginStroke(this.data.getColor());
 
-Stitch.prototype.loadData = function( data )
-{
-	var startGridPosition = data.startGridPosition;
-	var endGridPosition = data.endGridPosition;
+					this.stitchDisplay.graphics
+						.moveTo(start.x,start.y)
+						.lineTo(end.x,end.y)
+						.endStroke();
 
-	this.startPosition = this.virtualgrid.GetVirtualPosition(0,0);
-	this.endPosition = this.virtualgrid.GetVirtualPosition(0,0);
+					// Highlight
+					this.stitchDisplay.graphics
+						.setStrokeStyle(3,"round")
+						.beginStroke( this.data.getHighlightColor() );
 
-	this.startPosition.setGridPosition( startGridPosition.x, startGridPosition.y );
-	this.endPosition.setGridPosition( endGridPosition.x, endGridPosition.y );
-}
+					this.stitchDisplay.graphics
+						.moveTo(start.x,start.y)
+						.lineTo(end.x,end.y)
+					.endStroke();
+				// }
+			}
 
-Stitch.prototype.getData = function()
-{
-	var data = {
-		startGridPosition : this.startPosition.getGridPosition(),
-		endGridPosition : this.endPosition.getGridPosition()
-	};
-	return data;
-}
+			this.stitchTextureDisplay.graphics.endStroke();
 
+			this.stitchTextureDisplay.cache(canvas.width * -.5, canvas.height* -.5,canvas.width,canvas.height);	
+			this.stitchDisplay.cache(canvas.width* -.5,canvas.height* -.5,canvas.width,canvas.height);	
+		}
+
+		p.drawPoints = function()
+		{
+			this.pointDisplay.graphics.clear();
+			this.pointTextureDisplay.graphics.clear();
+
+			if(!this.data.hasPoints())
+				return;
+
+			var points = this.data.points;
+
+			this.pointDisplay.graphics.moveTo( points[0].x, points[0].y);
+			this.pointTextureDisplay.graphics.moveTo( points[0].x, points[0].y);
+
+			// Shadow
+			var midpoints = [];
+			var lastPoint = points[0];
+			var lastMidPoint = lastPoint;
+
+			this.pointDisplay.graphics.setStrokeStyle(7, "round");
+			this.pointDisplay.graphics.beginStroke( this.data.getShadowColor() );	
+
+			for( var i = 1; i < points.length; i++)
+			{
+				var point = points[i];
+				var midPoint = point.add( lastPoint ).scale( .5 );
+
+				this.pointDisplay.graphics.moveTo( midPoint.x, midPoint.y )
+					.curveTo(lastPoint.x, lastPoint.y, lastMidPoint.x, lastMidPoint.y );
+
+				lastPoint = point;
+				lastMidPoint = midPoint;
+				midpoints[i] = midPoint;
+			}
+			// this.pointDisplay.graphics.lineTo(lastPoint.x,lastPoint.y);
+			this.pointDisplay.graphics.endStroke();
+
+
+			// Fill
+			lastPoint = points[0];
+			lastMidPoint = lastPoint;
+
+			this.pointDisplay.graphics.setStrokeStyle(5, "round");
+			this.pointDisplay.graphics.beginStroke(this.data.getColor());
+
+			for( var i = 1; i < points.length; i++)
+			{
+				var point = points[i];
+				var midPoint = midpoints[i];
+
+				this.pointDisplay.graphics.moveTo( midPoint.x, midPoint.y )
+					.curveTo(lastPoint.x, lastPoint.y, lastMidPoint.x, lastMidPoint.y );
+
+				lastMidPoint = midPoint;
+				lastPoint = point;
+			}
+			// this.pointDisplay.graphics.lineTo(lastPoint.x,lastPoint.y);
+
+			// Highlight
+			lastPoint = points[0];
+			lastMidPoint = lastPoint;
+
+			this.pointDisplay.graphics.setStrokeStyle(3, "round");
+			this.pointDisplay.graphics.beginStroke( this.data.getHighlightColor() );
+
+			for( var i = 1; i < points.length; i++)
+			{
+				var point = points[i];
+				var midPoint = midpoints[i];
+
+				this.pointDisplay.graphics.moveTo( midPoint.x, midPoint.y )
+					.curveTo(lastPoint.x, lastPoint.y, lastMidPoint.x, lastMidPoint.y );
+
+				lastMidPoint = midPoint;
+				lastPoint = point;
+			}
+			// this.pointDisplay.graphics.lineTo(lastPoint.x,lastPoint.y);
+
+			// Texture
+			lastPoint = points[0];
+			lastMidPoint = lastPoint;
+			
+			this.pointTextureDisplay.graphics.setStrokeStyle(5, "round");
+			this.pointTextureDisplay.graphics.beginBitmapStroke ( applicationData.getResult("thread") , "repeat" );		
+
+			for( var i = 1; i < points.length; i++)
+			{
+				var point = points[i];
+				var midPoint = midpoints[i];
+
+				this.pointTextureDisplay.graphics.moveTo( midPoint.x, midPoint.y )
+					.curveTo(lastPoint.x, lastPoint.y, lastMidPoint.x, lastMidPoint.y );
+
+				lastMidPoint = midPoint;
+				lastPoint = point;
+			}
+			// this.pointTextureDisplay.graphics.lineTo(lastPoint.x,lastPoint.y);
+
+		}
+
+		p.animatePoints = function()
+		{
+			this.animationsCompleted = 0;
+
+			var start = this.data.points[0];
+			var end = this.data.points[this.data.points.length-1];
+			var self = this;
+
+			for(var i = 1; i < this.data.points.length-1; i++ )
+			{
+				var point = this.data.points[i];
+				this.tweens[i] = createjs.Tween.get(point, {override: true}).to(
+					{x: end.x, y: end.y},
+					300 - ( 4 * i ),
+					createjs.Ease.quadInOut).call( function(){
+						self.animationsCompleted++;
+						if( self.animationsCompleted >= self.data.points.length - 2 )
+						{
+							self.data.clearPoints();
+							self.drawStitches();
+						}
+					});
+			}			
+		}
+
+		p.forceAnimationComplete = function()
+		{
+			createjs.Tween.removeAllTweens ( this );			
+			this.data.clearPoints();
+		}
+
+		p.undo = function()
+		{
+			this.data.clearPoints();
+			this.data.undoStitch();
+			this.drawStitches();
+		}
+
+		p.changeStyle = function( id )
+		{
+			this.data.setColor( id );
+			this.drawStitches();
+		}
+
+	window.Thread= createjs.promote( Thread, "Container" );
+
+} () );

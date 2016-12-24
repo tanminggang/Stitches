@@ -300,23 +300,7 @@
 			}
 		}
 
-		p.animatePoints = function( thread )
-		{
-			if(!thread)
-				return;
 
-			var start = thread.points[0];
-			var end = thread.points[thread.points.length-1];
-
-			for(var i = 1; i < thread.points.length-1; i++ )
-			{
-				var point = thread.points[i];
-				var tween = createjs.Tween.get(point).to(
-					{x: end.x, y: end.y},
-					300 - ( 4 * i ),
-					createjs.Ease.quadInOut);
-			}
-		}
 
 		p.clear = function()
 		{

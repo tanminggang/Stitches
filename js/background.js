@@ -14,7 +14,6 @@
 			this.backgroundStyle = document.getElementsByTagName("body")[0].style;
 			this.bitmap = new createjs.Bitmap( applicationData.getResult("background") );
 
-
 			this.pattern = new createjs.Shape();
 
 			this.updateBackgroundFill();
@@ -30,7 +29,7 @@
 			var xy = this.virtualGrid.GetVirtualPosition(canvas.width * -.5,canvas.height * -.5).getCenteredPosition();
 
 			this.x = xy.x + this.virtualGrid.spacing * 0.5;
-			this.y = xy.y + this.virtualGrid.spacing * 0.5;//canvas.height * -.5;			
+			this.y = xy.y + this.virtualGrid.spacing * 0.5;			
 		}
 
 		p.resize = function()
@@ -58,9 +57,6 @@
 		{
 			var wX = Math.floor(this.parent.x / this.virtualGrid.spacing) * this.virtualGrid.spacing;
 			var wY = Math.floor(this.parent.y / this.virtualGrid.spacing) * this.virtualGrid.spacing;
-
-			// this.display.x = -wX;
-			// this.display.y = -wY;
 
 			this.pattern.x = -wX;
 			this.pattern.y = -wY;
