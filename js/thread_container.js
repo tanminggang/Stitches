@@ -51,6 +51,7 @@
 			var thread = new Thread( this.virtualgrid );
 			this.addChild( thread );
 			this.threads.push( thread );
+			
 			return thread;
 		}
 

@@ -211,6 +211,7 @@ Input.prototype.load = function( data )
 		var nativeThreadData = nativeData.threads[i];
 		var thread = this.threadContainer.addThread();
 			thread.data.loadData( nativeThreadData );
+			thread.drawStitches();
 	}
 
 	if(nativeData.panPosition)
