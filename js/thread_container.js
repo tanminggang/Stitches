@@ -14,16 +14,41 @@
 		{
 			this.threads = [];
 
+			this.isPressing = false;
 			this.mouseEnabled = false;
 			this.mouseChilden = false;
-
+			
 			this.addThread();
+
+			stage.on("stagemousedown", this.pressDown, this);
+			stage.on("stagemouseup", this.pressUp, this);
+			stage.on("stagemousemove", this.pressMove, this);			
 		}
 
-		p.addThread = function( data )
+		p.pressDown = function( event )
 		{
-			console.log("thread added");
-			data = new ThreadData( this.virtualgrid, threadId)
+			this.isPressing = true;
+			this.currentThread().pressDown();
+		}
+
+		p.pressUp = function( event )
+		{
+
+			this.isPressing = false;
+			this.currentThread().pressUp();
+		}
+
+		p.pressMove = function( event )
+		{
+			if(!this.isPressing)
+				return;
+
+			this.currentThread().pressMove();
+		}
+
+		p.addThread = function()
+		{
+			var data = new ThreadData( this.virtualgrid, threadId)
 			var thread = new Thread( this.virtualgrid, data);
 			this.addChild( thread );
 			this.threads.push( thread );
@@ -36,8 +61,8 @@
 
 			if(( thread == null ) || ( !this.hasThreads() ) || ( thread.data.hasStitches() ))
 			{
-				if( thread.data.hasPoints() )
-					thread.data.clearPoints();
+				//if( thread.data.hasPoints() )
+				//	thread.data.clearPoints();
 
 				this.addThread();
 			}else{

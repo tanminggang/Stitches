@@ -13,6 +13,8 @@
 
 		p.setup = function()
 		{
+			this.lastPoint = null;
+
 			this.stitchDisplay = new createjs.Shape();
 			this.stitchTextureDisplay = new createjs.Shape();
 			this.stitchTextureDisplay.compositeOperation = 'screen';
@@ -25,20 +27,12 @@
 
 			this.addChild( this.stitchDisplay, this.pointDisplay, this.pointTextureDisplay, this.stitchTextureDisplay );
 
-			this.isPressing = false;
-
-			stage.on("stagemousedown", this.pressDown, this);
-			stage.on("stagemouseup", this.pressUp, this);
-			stage.on("stagemousemove", this.pressMove, this);
 			this.on("tick", this.update, this);
 			this.on("removed", this.removed,this);
 		}
 
 		p.removed = function( event )
 		{
-			stage.off("stagemousedown", this.pressDown, this);
-			stage.off("stagemouseup", this.pressUp, this);
-			stage.off("stagemousemove", this.pressMove, this);
 			this.off("tick", this.update, this);
 			this.off("removed", this.removed,this);
 		}
@@ -48,9 +42,8 @@
 			this.drawPoints();
 		}
 
-		p.pressDown = function( event )
+		p.pressDown = function()
 		{
-			console.log( this.stage );
 			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
 			var stitch = this.data.startStitch( pt.x, pt.y);
 			var point = stitch.startPosition.getCenteredPosition();
@@ -62,12 +55,13 @@
 
 			this.data.addPoint( point.x,point.y );
 			this.data.addPoint( point.x,point.y );
-
-			this.isPressing = true;
 		}
 
-		p.pressUp = function( event )
+		p.pressUp = function()
 		{
+			if(!this.lastPoint)
+				return;
+
 			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
 			var stitch = this.data.endStitch( pt.x, pt.y);
 			var point = stitch.endPosition.getCenteredPosition();
@@ -75,25 +69,14 @@
 			this.data.addPoint( point.x,point.y );
 			this.drawStitches();
 
-			// Animation Stuff
-			var start = this.data.points[0];
-			var end = this.data.points[this.data.points.length-1];
+			this.animatePoints();
 
-			for(var i = 1; i < this.data.points.length-1; i++ )
-			{
-				var point = this.data.points[i];
-				var tween = createjs.Tween.get(point).to(
-					{x: end.x, y: end.y},
-					300 - ( 4 * i ),
-					createjs.Ease.quadInOut);
-			}
-
-			this.isPressing = false;
+			this.lastPoint = null;
 		}
 
-		p.pressMove = function( event )
+		p.pressMove = function()
 		{
-			if(!this.isPressing)
+			if(!this.lastPoint)
 				return;
 
 			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
@@ -270,6 +253,33 @@
 				lastPoint = point;
 			}
 		}
+
+		p.animatePoints = function()
+		{
+			// Animation Stuff
+			var start = this.data.points[0];
+			var end = this.data.points[this.data.points.length-1];
+
+			for(var i = 1; i < this.data.points.length-1; i++ )
+			{
+				var point = this.data.points[i];
+				var tween = createjs.Tween.get(point).to(
+					{x: end.x, y: end.y},
+					300 - ( 4 * i ),
+					createjs.Ease.quadInOut);
+			}			
+		}
+
+		// p.forceThreadComplete = function()
+		// {
+		// 	if(!this.date.hasPoints())
+		// 		return;
+
+		// 	var point = stitch.endPosition.getCenteredPosition();
+
+		// 	this.data.addPoint( point.x,point.y );
+		// 	this.animatePoints();
+		// }
 
 		p.undo = function()
 		{
