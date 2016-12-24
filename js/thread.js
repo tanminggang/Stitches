@@ -1,6 +1,5 @@
 (function(){
 
-
 	function Thread( virtualgrid, data )
 	{
 		this.Container_constructor();
@@ -32,10 +31,26 @@
 			stage.on("stagemouseup", this.pressUp, this);
 			stage.on("stagemousemove", this.pressMove, this);
 			this.on("tick", this.update, this);
+			this.on("removed", this.removed,this);
+		}
+
+		p.removed = function( event )
+		{
+			stage.off("stagemousedown", this.pressDown, this);
+			stage.off("stagemouseup", this.pressUp, this);
+			stage.off("stagemousemove", this.pressMove, this);
+			this.off("tick", this.update, this);
+			this.off("removed", this.removed,this);
+		}
+
+		p.update = function( event )
+		{
+			this.drawPoints();
 		}
 
 		p.pressDown = function( event )
 		{
+			console.log( this.stage );
 			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
 			var stitch = this.data.startStitch( pt.x, pt.y);
 			var point = stitch.startPosition.getCenteredPosition();
@@ -60,6 +75,7 @@
 			this.data.addPoint( point.x,point.y );
 			this.drawStitches();
 
+			// Animation Stuff
 			var start = this.data.points[0];
 			var end = this.data.points[this.data.points.length-1];
 
@@ -94,11 +110,6 @@
 					point.x = pt.x;
 					point.y = pt.y;
 			}
-		}
-
-		p.update = function( event )
-		{
-			this.drawPoints();
 		}
 
 		p.drawStitches = function()
@@ -264,6 +275,12 @@
 		{
 			this.data.clearPoints();
 			this.data.undoStitch();
+			this.drawStitches();
+		}
+
+		p.changeStyle = function( id )
+		{
+			this.data.setColor( id );
 			this.drawStitches();
 		}
 

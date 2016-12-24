@@ -18,33 +18,11 @@
 			this.mouseChilden = false;
 
 			this.addThread();
-			// this.on("added", this.added );
 		}
-
-		// p.added = function( event )
-		// {
-		// 	this.stage.on("stagemousedown", this.pressDown, this);
-		// 	this.stage.on("stagemouseup", this.pressUp, this);
-		// 	this.stage.on("stagemousemove", this.pressMove, this);
-		// }
-
-		// p.pressDown = function( event )
-		// {
-
-		// }
-
-		// p.pressUp = function( event )
-		// {
-
-		// }
-
-		// p.pressMove = function( event )
-		// {
-
-		//}
 
 		p.addThread = function( data )
 		{
+			console.log("thread added");
 			data = new ThreadData( this.virtualgrid, threadId)
 			var thread = new Thread( this.virtualgrid, data);
 			this.addChild( thread );
@@ -52,19 +30,19 @@
 			return thread;
 		}
 
-		p.removeThread = function()
-		{
-
-		}
-
-		p.clearThreads = function()
-		{
-
-		}
-
 		p.changeThread = function()
 		{
+			var thread = this.currentThread();
 
+			if(( thread == null ) || ( !this.hasThreads() ) || ( thread.data.hasStitches() ))
+			{
+				if( thread.data.hasPoints() )
+					thread.data.clearPoints();
+
+				this.addThread();
+			}else{
+				thread.changeStyle( threadId );
+			}
 		}
 
 		p.currentThread = function()
@@ -73,12 +51,26 @@
 			if(length <= 0)
 				return null
 
-			return this.threads[length-1];	
+			return this.threads[length - 1];	
 		}
 
-		p.clear = function()
+		p.clearThreads = function()
 		{
+			for(var i = 0; i < this.threads.length; i++)
+			{
+				var thread = this.threads[i];
+				this.removeChild( thread );
+			}
+			this.threads = [];
+			this.addThread();
+		}
 
+		p.hasThreads = function()
+		{
+			if(this.threads.length > 0)
+				return true;
+
+			return false;
 		}
 
 		p.undo = function()
@@ -95,7 +87,7 @@
 				removeChild( thread );
 				this.threads.pop();
 			}
-			
+
 		}
 
 	window.ThreadContainer = createjs.promote( ThreadContainer, "Container" );

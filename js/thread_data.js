@@ -73,7 +73,7 @@ ThreadData.prototype.hasStitches = function()
 	return false;
 }
 
-ThreadData.prototype.hasPoints= function()
+ThreadData.prototype.hasPoints = function()
 {
 	if(this.points.length > 0)
 		return true;

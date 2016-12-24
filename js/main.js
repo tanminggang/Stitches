@@ -42,21 +42,21 @@ function applicationReady( event )
 	var virtualgrid = new VirtualGrid( spacing );
 
 	// Display	
+	var displayContainer = new createjs.Container();
 	var background = new Background( virtualgrid );
 	var cursor = new Cursor( virtualgrid );
 	var threadContainer = new ThreadContainer( virtualgrid );
-	var displayContainer = new createjs.Container();
-
+	
 	// Input
-	// var input = new Input( virtualgrid, displayContainer, background, display );
+	var input = new Input( virtualgrid, displayContainer, background, threadContainer );
 
 	// Add Children
 	container.addChild( displayContainer );
 	displayContainer.addChild( background, threadContainer, cursor );
 
-	// var data = '';
-	// if(data)
-	// 	input.load( data );	
+	var data = '';
+	if(data)
+		input.load( data );	
 }
 
 /*

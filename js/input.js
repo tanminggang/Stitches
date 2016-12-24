@@ -1,9 +1,9 @@
-function Input( virtualgrid, displayContainer, background, display )
+function Input( virtualgrid, displayContainer, background, threadContainer )
 {
 	this.virtualgrid = virtualgrid;
 	this.displayContainer = displayContainer;
 	this.background = background;
-	this.display = display;
+	this.threadContainer = threadContainer;
 
 	this.spacebarDown = false;
 	this.lastPosition = new Point();
@@ -39,8 +39,8 @@ Input.prototype.createColorNav = function()
 	{
 		var keyId = i +1;
 		var color = threadStyle[i];
-		var thread = new Thread(null, i);
-		var element = $('<li><a href="#" style="background-color:'+ thread.getColor() +'; border-color:' + thread.getColor() +'">'+keyId+'</a></li>');
+		var threadData = new ThreadData(null, i);
+		var element = $('<li><a href="#" style="background-color:'+ threadData.getColor() +'; border-color:' + threadData.getColor() +'">'+keyId+'</a></li>');
 			element.data("styleId", i );
 			element.click( function(){
 				self.changeThread( $(this).data("styleId") );
@@ -55,7 +55,7 @@ Input.prototype.toggleHelp = function()
 {
 	var self = (self == null)?(this):(self);
 	self.resetZoom();
-	self.display.visible = (self.display.visible)?(false):(true);
+	self.threadContainer.visible = (self.threadContainer.visible)?(false):(true);
 	$('#center a').fadeToggle();//slideToggle();			
 }
 
@@ -103,7 +103,7 @@ Input.prototype.keyDown = function ( event )
 			var shouldClear = confirm("Clear Stiches?");
 			if(shouldClear)
 			{
-				this.display.clear();
+				this.threadContainer.clearThreads();
 				this.resetView();
 				this.resetZoom();
 			}
@@ -113,8 +113,8 @@ Input.prototype.keyDown = function ( event )
 			this.resetZoom();
 			break;
 		case 90: 	// 'z'
-			this.display.undo();
-			var thread = this.display.currentThread();
+			this.threadContainer.undo();
+			var thread = this.threadContainer.currentThread();
 			if(thread)
 				this.changeThreadUI( thread.styleId );		
 			break;			
@@ -147,17 +147,12 @@ Input.prototype.changeThread = function( id )
 	if(id < threadStyle.length)
 	{
 		threadId = id;
-		this.display.changeThread();
+		this.threadContainer.changeThread();
 		this.changeThreadUI( id );
-			//.append('<i class="fa fa-heart" aria-hidden="true"></i>');	
+
 		return true;
-		/*
-			-webkit-transform: height .5s;
-			transition: height .5s;
-		*/
-
 	}
-
+	
 	return false;
 }
 
@@ -189,14 +184,14 @@ Input.prototype.mouseWheel = function ( event )
 
 Input.prototype.save = function()
 {
-	var threads = this.display.threads;
+	var threads = this.threadContainer.threads;
 	var data = {};
 		data.panPosition = new Point( this.displayContainer.x, this.displayContainer.y );
 		data.threads = [];
 
-	for(var i = 0; i < this.display.threads.length; i++)
+	for(var i = 0; i < this.threadContainer.threads.length; i++)
 	{
-		data.threads[i] = this.display.threads[i].getData();
+		data.threads[i] = this.threadContainer.threads[i].getData();
 	}
 	
 	var blob = new Blob([ JSON.stringify( data )], {type:"text/json"});
@@ -210,20 +205,20 @@ Input.prototype.load = function( data )
 	var nativeData = JSON.parse(data);
 
 
-	this.display.threads = [];
+	this.threadContainer.threads = [];
 
 	for(var i = 0; i < nativeData.threads.length; i++)
 	{
 		var threadData = nativeData.threads[i];
-		var thread = this.display.createThread();
+		var thread = this.threadContainer.createThread();
 			thread.loadData( threadData );
 	}
 
-	this.display.updateThreads();
+	this.threadContainer.updateThreads();
 
 	if(nativeData.panPosition)
 	{
-		this.displayContainer.x = nativeData.panPosition.x;
+		this.threadContainerContainer.x = nativeData.panPosition.x;
 		this.displayContainer.y = nativeData.panPosition.y;
 	}
 
