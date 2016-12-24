@@ -21,14 +21,11 @@ function Input( virtualgrid, displayContainer, background, threadContainer )
 
 Input.prototype.createHelpNav = function()
 {
-	//$('#center a').hide();
-
 	var self = this;
 	var helpBtn = $('#top a');
 		helpBtn.click( function(){
 			self.toggleHelp();
 		});
-
 }
 
 Input.prototype.createColorNav = function()
@@ -116,7 +113,7 @@ Input.prototype.keyDown = function ( event )
 			this.threadContainer.undo();
 			var thread = this.threadContainer.currentThread();
 			if(thread)
-				this.changeThreadUI( thread.styleId );		
+				this.changeThreadUI( thread.data.styleId );		
 			break;			
 		default:
 			//console.log( event.keyCode);
@@ -203,7 +200,7 @@ Input.prototype.save = function()
 Input.prototype.load = function( data )
 {
 	this.threadContainer.clearThreads();
-	
+
 	var nativeData = JSON.parse(data);
 
 	this.threadContainer.threads = [];

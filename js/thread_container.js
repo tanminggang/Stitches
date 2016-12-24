@@ -51,7 +51,7 @@
 			var thread = new Thread( this.virtualgrid );
 			this.addChild( thread );
 			this.threads.push( thread );
-			
+
 			return thread;
 		}
 
@@ -122,6 +122,7 @@
 				this.threads.pop();
 			}
 
+			
 		}
 
 	window.ThreadContainer = createjs.promote( ThreadContainer, "Container" );
