@@ -98,7 +98,6 @@
 
 		p.update = function( event )
 		{
-			this.drawStitches();
 			this.drawPoints();
 		}
 
