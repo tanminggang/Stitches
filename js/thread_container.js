@@ -14,36 +14,43 @@
 		{
 			this.threads = [];
 
-			this.isPressing = false;
+			this.pressingThread = null;
 			this.mouseEnabled = false;
 			this.mouseChilden = false;
 			
 			this.addThread();
 
-			stage.on("stagemousedown", this.pressDown, this);			
-			stage.on("stagemousemove", this.pressMove, this);			
+			
 			stage.on("stagemouseup", this.pressUp, this);
+			stage.on("stagemousemove", this.pressMove, this);
+			stage.on("stagemousedown", this.pressDown, this);			
 		}
 
 		p.pressDown = function( event )
 		{
-			this.isPressing = true;
-			this.currentThread().pressDown();
+			if(this.pressingThread != null)
+			{
+				console.log("pressingThread:"+this.pressingThread+" didn't recieve a press Up Event.");
+				this.pressingThread.pressUp();
+				this.pressingThread = null;
+			}
+
+			this.pressingThread = this.currentThread();
+			this.pressingThread.pressDown();
 		}
 
 		p.pressUp = function( event )
 		{
-
-			this.isPressing = false;
-			this.currentThread().pressUp();
+			this.pressingThread.pressUp();
+			this.pressingThread = null;
 		}
 
 		p.pressMove = function( event )
 		{
-			if(!this.isPressing)
+			if(!this.pressingThread)
 				return;
 
-			this.currentThread().pressMove();
+			this.pressingThread.pressMove();
 		}
 
 		p.addThread = function()
@@ -61,8 +68,9 @@
 
 			if(( thread == null ) || ( !this.hasThreads() ) || ( thread.data.hasStitches() ))
 			{
-				if( thread.data.hasPoints() )
-					thread.forceAnimationComplete();
+				// if( thread.data.hasPoints() )
+				// 	thread.pressUp();
+				//	thread.forceAnimationComplete();
 
 				this.addThread();
 			}else{
@@ -121,7 +129,6 @@
 				this.removeChild( thread );
 				this.threads.pop();
 			}
-
 			
 		}
 

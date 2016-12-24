@@ -47,7 +47,17 @@
 
 		p.pressDown = function()
 		{
-			createjs.Tween.removeAllTweens ( this );
+			if( !this.stage )
+				return;
+
+			//createjs.Tween.removeAllTweens ( this );
+
+			for( var i = 0; i < this.tweens.length; i++)
+			{
+				var tween = this.tweens[i];
+				if(tween)
+					tween.setPaused(true);
+			}
 
 			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
 			var stitch = this.data.startStitch( pt.x, pt.y );
@@ -64,9 +74,6 @@
 
 		p.pressUp = function()
 		{
-			if(!this.lastPoint)
-				return;
-
 			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
 			var stitch = this.data.endStitch( pt.x, pt.y);
 			var point = stitch.endPosition.getCenteredPosition();
