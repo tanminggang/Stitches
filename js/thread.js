@@ -1,10 +1,10 @@
 (function(){
 
-	function Thread( virtualgrid, data )
+	function Thread( virtualgrid )
 	{
 		this.Container_constructor();
 		this.virtualgrid = virtualgrid;
-		this.data = data;
+		this.data = new ThreadData( this.virtualgrid, threadId);
 
 		this.setup();
 	}
@@ -28,6 +28,8 @@
 
 			this.addChild( this.stitchDisplay, this.pointDisplay, this.pointTextureDisplay, this.stitchTextureDisplay );
 
+			this.drawStitches();
+			
 			this.on("tick", this.update, this);
 			this.on("removed", this.removed,this);
 		}
@@ -48,7 +50,7 @@
 			createjs.Tween.removeAllTweens ( this );
 
 			var pt = this.globalToLocal(this.stage.mouseX , this.stage.mouseY);
-			var stitch = this.data.startStitch( pt.x, pt.y);
+			var stitch = this.data.startStitch( pt.x, pt.y );
 			var point = stitch.startPosition.getCenteredPosition();
 
 			this.lastPoint = pt;
@@ -98,9 +100,6 @@
 				var point = this.data.points[ this.data.points.length - 1 ];
 					point.x = pt.x;			/// why is this dead?!?!?! Can't figure it out
 					point.y = pt.y;
-
-					if(pt == null)
-						console.log( pt );
 			}
 		}
 
@@ -293,7 +292,7 @@
 			}			
 		}
 
-		p.clearPointAnimation = function()
+		p.forceAnimationComplete = function()
 		{
 			createjs.Tween.removeAllTweens ( this );			
 			this.data.clearPoints();

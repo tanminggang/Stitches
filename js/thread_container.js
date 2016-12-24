@@ -47,9 +47,8 @@
 		}
 
 		p.addThread = function()
-		{
-			var data = new ThreadData( this.virtualgrid, threadId)
-			var thread = new Thread( this.virtualgrid, data);
+		{		
+			var thread = new Thread( this.virtualgrid );
 			this.addChild( thread );
 			this.threads.push( thread );
 			return thread;
@@ -57,15 +56,12 @@
 
 		p.changeThread = function()
 		{
-			if(this.isPressing)
-				return;
-			
 			var thread = this.currentThread();
 
 			if(( thread == null ) || ( !this.hasThreads() ) || ( thread.data.hasStitches() ))
 			{
 				if( thread.data.hasPoints() )
-					thread.clearPointAnimation();
+					thread.forceAnimationComplete();
 
 				this.addThread();
 			}else{

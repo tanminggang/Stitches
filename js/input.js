@@ -204,21 +204,18 @@ Input.prototype.load = function( data )
 {
 	var nativeData = JSON.parse(data);
 
-
 	this.threadContainer.threads = [];
 
 	for(var i = 0; i < nativeData.threads.length; i++)
 	{
-		var threadData = nativeData.threads[i];
-		var thread = this.threadContainer.createThread();
-			thread.loadData( threadData );
+		var nativeThreadData = nativeData.threads[i];
+		var thread = this.threadContainer.addThread();
+			thread.data.loadData( nativeThreadData );
 	}
-
-	this.threadContainer.updateThreads();
 
 	if(nativeData.panPosition)
 	{
-		this.threadContainerContainer.x = nativeData.panPosition.x;
+		this.threadContainer.x = nativeData.panPosition.x;
 		this.displayContainer.y = nativeData.panPosition.y;
 	}
 
